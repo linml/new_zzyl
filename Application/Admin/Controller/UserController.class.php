@@ -2155,11 +2155,28 @@ class UserController extends AdminController
      * */
     function cash_management_list()
     {
+        $type = I('type');
+        $search = I('search');
+
         $is_super = I('is_super', false);
         $is_online = I('is_online', false);
         $is_jujue = I('is_jujue', false);
 
         $where = [];
+
+        if ($type && $search) {
+            switch ($type) {
+                case 1:
+                    $where['uif.userID'] = $search;
+                    break;
+                case 2:
+                    $where['uif.name'] = ['like', "%{$search}%"];
+                    break;
+            }
+        } else {
+            $search = '';
+        }
+
         // 查询提现中
         if ($is_super) {
             $where['U.cash_status'] =1;
@@ -2175,10 +2192,11 @@ class UserController extends AdminController
             $where['U.cash_status'] =3;
         }
 
-        $count = M()->table('user_cash_application as U')->where($where)->count();
+        $count = M()->table('user_cash_application as U')->join('left join userInfo as uif on uif.userID=U.userID')->where($where)->count();
         $page = new \Think\Page($count, 20);
         $dbUserList = M()
             ->table('user_cash_application as U')
+            ->join('left join userInfo as uif on uif.userID=U.userID')
             ->where($where)
             ->field('U.Id, U.userID, U.transferable_amount, U.remarks, U.nickname, U.create_time, U.process_time, U.cash_account_type, U.cash_status, U.cash_money, U.cash_withdrawal, U.cash_rate, U.cash_remarks')
             ->order('U.Id desc')

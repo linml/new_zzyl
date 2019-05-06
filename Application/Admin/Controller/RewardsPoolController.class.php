@@ -339,7 +339,7 @@ class RewardsPoolController extends AgentController
             ],
             'platformctrlpercent' => [
                 'key' => 'platformctrlpercent',
-                'title' => '单点控制千分比',
+                'title' => '输赢胜率千分比',
                 'type' => ['type' => 'input', 'name' => 'platformctrlpercent', 'attribution' => 'style="width:80px;"']
             ],
             'realPeopleFailPercent' => [
