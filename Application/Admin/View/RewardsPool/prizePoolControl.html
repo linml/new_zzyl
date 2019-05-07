@@ -115,7 +115,7 @@
                                 </thead>
                                 <tbody>
                                 <volist name="show_data" id="v">
-                                    <tr>
+                                    <tr class = "<?php echo 'current'.$v['roomid']; ?>">
                                         <form action="{$formRequest}" method="post" onsubmit="return form_ajax_post(this);">
                                             <volist name="show_list" key="k" id="vv">
                                                 <?php if (!empty($vv['href'])){ ?>
@@ -131,14 +131,27 @@
                                                 switch($type) {
                                                     case 'input':
                                                 ?>
-                                                    <input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+
+                                                    <if condition="(($v['gameid'] eq 30000200) OR ($v['gameid'] eq 11100200) OR ($v['gameid'] eq 40000100) OR ($v['gameid'] eq 10000900) OR ($v['gameid'] eq 10001000) OR ($v['gameid'] eq 11000100) OR ($v['gameid'] eq 20170405) OR ($v['gameid'] eq 36610103)) AND (($vv['key'] eq 'realpeoplefailpercent') OR ($vv['key'] eq 'realpeoplewinpercent'))">
+                                                        <input type="text" disabled name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                    <else />
+                                                        <input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                    </if>
+
+                                                    <!--<in name='$roomid' value="30000200,11100200,40000100,10000900,10001000,11000100,20170405,36610103">
+                                                        <input type="text" disabled name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                        <else/>
+                                                        <input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                    </in>-->
+                                                    <!--<input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">-->
+
                                                     <?php break;
                                                     case 'option':
                                                 ?>
-                                                    <select name="<?php echo $vv['type']['name'];?>" class="form-control m-b">
-                                                        <option value="">请选择</option>
-                                                        <volist name="vv.type.options" id="ov">
-                                                            <option value="{$ov.value}" <?php if ($v[$vv['key']] == $ov['value']) {?>selected="selected"<?php }?>>{$ov.text}</option>
+                                                    <select onchange="room_pool('<?php echo $v['roomid']; ?>',this.options[this.options.selectedIndex].value)" name="<?php echo $vv['type']['name'];?>" class="form-control m-b">
+                                                        <!--<option value="">请选择</option>-->
+                                                        <volist name="v.roominfo" id="ov">
+                                                            <option value="{$ov.roomid}" <?php if ($v['roomid'] == $ov['roomid']) {?>selected="selected"<?php }?>>{$ov.name}</option>
                                                         </volist>
                                                     </select>
                                                     <?php
@@ -165,6 +178,31 @@
                 </div>
             </div>
         </div>
+        <script>
+            function room_pool($currentroomid, $xuanzhongroomid) {
+                $.ajax({
+                    url:"{:U('getRoomBaseInfo')}",
+                    // data:{roomid:$xuanzhongroomid,start:start,stop:stop},
+                    data:{roomid:$xuanzhongroomid},
+                    type:'post',
+                    dataType:'json',
+                    success:function(data){
+                        $('.current'+$currentroomid).find("input[name='roomID']").val(data.roomid);
+                        $('.current'+$currentroomid).children().eq(3).text(data.platformprofitability);
+                        $('.current'+$currentroomid).children().eq(4).text(data.sumgamewinmoney);
+                        $('.current'+$currentroomid).children().eq(5).text(data.platformbankmoney);
+                        $('.current'+$currentroomid).find("input[name='incrementofgoldcoin']").val(data.incrementofgoldcoin);
+                        $('.current'+$currentroomid).find("input[name='platformctrlpercent']").val(data.platformctrlpercent);
+                        $('.current'+$currentroomid).find("input[name='realpeoplefailpercent']").val(data.realpeoplewinpercent);
+                        $('.current'+$currentroomid).find("input[name='minPondMoney']").val(data.minpondmoney);
+                        $('.current'+$currentroomid).find("input[name='maxPondMoney']").val(data.maxpondmoney);
+
+                    }
+                });
+
+            }
+
+        </script>
         <script type="text/javascript">
             //ajax post
             function form_ajax_post(e){

@@ -205,6 +205,34 @@ class RewardsPoolController extends AgentController
         return ['_data' => $data, '_count' => $count];
     }
 
+    public function getNewList($where, $page = 1, $limit = 10){
+        $data = M()
+            ->table($this->tableName)->alias('a')->join('left join ' . MysqlConfig::Table_roombaseinfo . ' b on a.roomID = b.roomID')
+            ->where($where)
+            ->field('a.*,b.name,b.gameID,b.roomID')
+            ->page($page)
+            ->limit($limit)
+            ->order('a.roomID desc')
+            ->group('b.gameID')
+            ->select();
+
+        //$where['a.roomID']  = 85;
+        $strwhere = '';
+        foreach ($where as $k => $v){
+            $strwhere .= $k.'='.$v.' and ';
+        }
+        $count = \think\Db::query("SELECT count(*)  AS tp_count FROM (SELECT
+	COUNT(*)
+FROM
+	rewardsPool a
+LEFT JOIN roomBaseInfo b ON a.roomID = b.roomID
+WHERE
+	".rtrim($strwhere, 'and ')."
+GROUP BY
+	b.gameID) t");
+        return ['_data' => $data, '_count' => $count[0]['tp_count']];
+    }
+
     //奖池控制
     public function prizePoolControl() {
         $page = I('p', 1);
@@ -274,7 +302,7 @@ class RewardsPoolController extends AgentController
         }
 
         $arrWhere['a.type'] = 0;
-        $res = $this->getList($arrWhere, $page, $limit);
+        $res = $this->getNewList($arrWhere, $page, $limit);
         $listCommission = $res['_data'];
 
         foreach ($listCommission as $k => &$v) {
@@ -300,6 +328,11 @@ class RewardsPoolController extends AgentController
             $v['maxpondmoney'] = (int)$v['maxpondmoney'] /100;
             $v['recoverypoint'] = FunctionHelper::MoneyOutput((int)$v['recoverypoint']);
             $v['incrementofgoldcoin'] = 0; //平台补偿金币增量
+            $v['roominfo'] = M()
+                ->table(MysqlConfig::Table_roombaseinfo)->alias('b')
+                ->where(['gameID' => $v['gameid'], 'is_hide' => 0])
+                ->field('b.name,b.gameID,b.roomID')
+                ->select();
         }
 
         $count = $res['_count'];
@@ -314,10 +347,11 @@ class RewardsPoolController extends AgentController
             'name' => [
                 'key' => 'name',
                 'title' => '游戏名称',
+                'type' => ['type' => 'option', 'name' => 'roomID', 'attribution' => 'style="width:80px;"']
             ],
             'platformprofitability' => [
                 'key' => 'platformprofitability',
-                'title' => '平台盈利',
+                'title' => '机器人输赢总额',
             ],
             'sumgamewinmoney' => [
                 'key' => 'sumgamewinmoney',
@@ -325,7 +359,7 @@ class RewardsPoolController extends AgentController
             ],
             'platformbankmoney' => [
                 'key' => 'platformbankmoney',
-                'title' => '平台银行储蓄',
+                'title' => '机器人赢钱回收金额',
             ],
             /*'recoverypoint' => [
                 'key' => 'recoverypoint',
@@ -380,6 +414,39 @@ class RewardsPoolController extends AgentController
         ]);
 //    	 var_export($listCommission);
         $this->display();
+    }
+
+    //获取每一个子游戏的奖池控制信息
+    public function getRoomBaseInfo(){
+        $v = M()
+            ->table($this->tableName)
+            ->where(['roomID' => I('roomid')])
+            ->find();
+        $rewsinfo = RedisManager::getGameRedis()->hGetAll("rewardsPool|".I('roomid'));
+        $v['gamewinmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['gameWinMoney']); //今日游戏输赢钱   实时获取
+        $v['allgamewinmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['allGameWinMoney']); //今日前累计游戏输赢钱  实时获取
+        $v['platformcompensate'] = FunctionHelper::MoneyOutput((int)$rewsinfo['platformCompensate']); //平台补偿金币   实时获取
+//            实时奖池 = 今日游戏输赢钱 + 今日前累计游戏输赢钱 + 平台补偿金币
+//            平台盈(机器人输赢总额	)  =  实时奖池 + 平台银行储蓄(机器人赢钱回收金额) - 平台补偿金币
+        $v['sumgamewinmoney'] = $v['gamewinmoney'] + $v['allgamewinmoney'] + $v['platformcompensate']; //实时奖池   实时获取
+        //$v['sumgamewinmoney'] = 100;
+        $v['platformbankmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['platformBankMoney']); //平台银行储蓄   实时获取
+        $v['platformprofitability'] = $v['sumgamewinmoney'] + $v['platformbankmoney'] - $v['platformcompensate']; //平台盈利
+        //$v['platformprofitability'] = 200;
+
+        $v['poolmoney'] = FunctionHelper::MoneyOutput((int)$v['poolmoney']);
+        $v['percentagewinmoney'] = FunctionHelper::MoneyOutput((int)$v['percentagewinmoney']);
+        $v['allpercentagewinmoney'] = FunctionHelper::MoneyOutput((int)$v['allpercentagewinmoney']);
+        $v['otherwinmoney'] = FunctionHelper::MoneyOutput((int)$v['otherwinmoney']);
+        $v['allotherwinmoney'] = FunctionHelper::MoneyOutput((int)$v['allotherwinmoney']);
+        $v['platformctrlpercent'] = (int)$rewsinfo['platformCtrlPercent']; //单点控制千分比	redis获取
+        $v['realpeoplefailpercent'] = (int)$v['realpeoplefailpercent'];
+        $v['realpeoplewinpercent'] = (int)$v['realpeoplewinpercent'];
+        $v['minpondmoney'] = (int)$v['minpondmoney'] /100;
+        $v['maxpondmoney'] = (int)$v['maxpondmoney'] /100;
+        $v['recoverypoint'] = FunctionHelper::MoneyOutput((int)$v['recoverypoint']);
+        $v['incrementofgoldcoin'] = 0; //平台补偿金币增量
+        echo json_encode($v);
     }
 
     public function rewardsPoolEdit() {
