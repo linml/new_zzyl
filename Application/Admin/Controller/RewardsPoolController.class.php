@@ -108,6 +108,7 @@ class RewardsPoolController extends AgentController
             }
         }
 
+        $arrWhere['b.gameID'] = array('neq','20170405');
     	$res = $this->getList($arrWhere, $page, $limit);
         $listCommission = $res['_data'];
 //        var_export($listCommission);
@@ -157,10 +158,10 @@ class RewardsPoolController extends AgentController
                 'key' => 'allgamewinmoney',
                 'title' => '今日前累计游戏输赢钱',
             ],
-            'platformcompensate' => [
+            /*'platformcompensate' => [
                 'key' => 'platformcompensate',
                 'title' => '平台补偿金币',
-            ],
+            ],*/
             'percentagewinmoney' => [
                 'key' => 'percentagewinmoney',
                 'title' => '今日累计抽水',
@@ -209,6 +210,7 @@ class RewardsPoolController extends AgentController
         $data = M()
             ->table($this->tableName)->alias('a')->join('left join ' . MysqlConfig::Table_roombaseinfo . ' b on a.roomID = b.roomID')
             ->where($where)
+            ->where("b.gameID != '36610103' and b.gameID != '20170405'")
             ->field('a.*,b.name,b.gameID,b.roomID')
             ->page($page)
             ->limit($limit)
@@ -217,7 +219,7 @@ class RewardsPoolController extends AgentController
             ->select();
 
         //$where['a.roomID']  = 85;
-        $strwhere = '';
+        $strwhere = "b.gameID != '36610103' and b.gameID != '20170405' and ";
         foreach ($where as $k => $v){
             $strwhere .= $k.'='.$v.' and ';
         }
@@ -357,10 +359,14 @@ GROUP BY
                 'key' => 'sumgamewinmoney',
                 'title' => '实时奖池',
             ],
-            'platformbankmoney' => [
+            'platformcompensate' => [
+                'key' => 'platformcompensate',
+                'title' => '平台补偿金币',
+            ],
+            /*'platformbankmoney' => [
                 'key' => 'platformbankmoney',
                 'title' => '机器人赢钱回收金额',
-            ],
+            ],*/
             /*'recoverypoint' => [
                 'key' => 'recoverypoint',
                 'title' => "平台回收金币的结点(0表示<br/>默认的800,必须大于0)",

@@ -227,7 +227,7 @@ class GameController extends AdminController
             }
         }
         // $arrWhere['gamewinmoney']  = ['neq',0];
-
+        $arrWhere['b.gameID'] = array('neq','20170405');
         $res = $this->getList($arrWhere, $page, $limit);
         $listCommission = $res['_data'];
 
@@ -408,7 +408,7 @@ class GameController extends AdminController
         }
 
 //        $listCommission = $this->getList($arrWhere, $page, $limit);
-        $listCommission = M()->table(MysqlConfig::Table_gamebaseinfo)->page($page, $limit)->order('sort desc, gameID')->select();
+        $listCommission = M()->table(MysqlConfig::Table_gamebaseinfo)->where("gameID != '20170405'")->page($page, $limit)->order('sort desc, gameID')->select();
         $arrGameID = array_column($listCommission, 'gameid');
         $arrGameID = $arrGameID ? $arrGameID : ['0'];
         $resCount = M()->query('select count(*) as cnt, gameID from ' . MysqlConfig::Table_roombaseinfo . ' where is_Recommend = 1 and gameID in (' . implode(',', $arrGameID) . ') group by gameID' );
@@ -430,7 +430,7 @@ class GameController extends AdminController
         }
         // implode(glue, pieces)
         $count = M()
-            ->table($this->tableName)->alias('a')->where($arrWhere)->count();
+            ->table($this->tableName)->alias('a')->where($arrWhere)->where("a.gameID != '20170405'")->count();
         $pager = new \Think\Page($count, $limit);
         // var_export( $pager);exit;
         //type = ['text', 'option', 'input']
