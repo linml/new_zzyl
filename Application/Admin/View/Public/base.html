@@ -782,7 +782,7 @@
         }
 
         $(function(){
-            setInterval(notifyPayAlert, 6000);
+            setInterval(notifyPayAlert, 60000);
             // playAudio()
         })
         function notifyPayAlert(){
@@ -799,10 +799,10 @@
 
         function playAudio(){
 
-            var strAudio = "<embed id='audioPlay' src='__PUBLIC__/admin/audio/djcj.mp3 ' />";
+            var strAudio = "<embed id='oldaudioPlay' src='__PUBLIC__/admin/audio/djcj.mp3 ' />";
 
             $( "body" ).append( strAudio );
-            var audio = document.getElementById( "audioPlay" );
+            var audio = document.getElementById( "oldaudioPlay" );
             //浏览器支持 audio
             audio.play();
 
@@ -815,6 +815,17 @@
             //浏览器支持 audio
             audio.play();*/
         }
+
+        $(function(){
+            setInterval(removeEmbed, 500);
+            // playAudio()
+        })
+
+        function removeEmbed(){
+            $("#audioPlay").remove();
+            $("#oldaudioPlay").remove();
+        }
+
     </script>
 </body>
 </html>
