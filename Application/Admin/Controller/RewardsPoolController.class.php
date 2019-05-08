@@ -330,7 +330,7 @@ GROUP BY
             $v['incrementofgoldcoin'] = 0; //平台补偿金币增量
             $v['roominfo'] = M()
                 ->table(MysqlConfig::Table_roombaseinfo)->alias('b')
-                ->where(['gameID' => $v['gameid'], 'is_hide' => 0])
+                ->where(['gameID' => $v['gameid'], 'is_hide' => 0, 'type' => 0, 'roomSign' => 0])
                 ->field('b.name,b.gameID,b.roomID')
                 ->select();
         }
