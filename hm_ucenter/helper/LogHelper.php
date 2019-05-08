@@ -383,7 +383,7 @@ final class LogHelper
         $to_uid = "1111";
         // 推送的url地址，使用自己的服务器地址
         //$push_api_url = "http://huo.qq:2121/";
-        $push_api_url = "http://47.107.147.29:2121/";
+        $push_api_url = "http://47.107.49.170:2121/";
         $post_data = array(
             "type" => "publish",
             "content" => "这个是推送的测试数据",
