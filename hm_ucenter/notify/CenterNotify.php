@@ -151,6 +151,7 @@ final class CenterNotify
      */
     public static function resourceChange($userID, $resourceType, $value, $changeValue, $reason = 0, $reserveData = 0, $isNotifyRoom = 0)
     {
+        echo 789;exit;
         $struct = StructConfig::resourceChange($resourceType, $value, $changeValue, $reason, $reserveData, $isNotifyRoom);
         var_dump(ProtocolConfig::PLATFORM_MESSAGE_RESOURCE_CHANGE);
         var_dump($userID);

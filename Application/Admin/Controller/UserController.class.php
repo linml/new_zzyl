@@ -693,29 +693,25 @@ class UserController extends AdminController
     public function user_recharge()
     {
         if (IS_POST) {
-            echo 22;
             $userID = (int)I('userid');
             $type = (int)I('type');
             $num = $numLog = (int)I('amount');
-            echo 33;
             if (empty($userID)) {
                 $this->error('userID 不能为空');
             }
-            echo 44;
             if ($num <= 0) {
                 $this->error('请输入正确的充值数量');
             }
-            echo 55;
+
             if ($type == EnumConfig::E_RechargeType['MONEY']) {
                 $num = FunctionHelper::MoneyInput($num);
             }
-            echo 66;
+
             if ($num > self::MAX_USER_RECHARGE) {
                 $this->error("单次充值不能超过" . self::MAX_USER_RECHARGE);
             }
-echo 77;
-            $res = UserModel::getInstance()->getUserInfo($userID, ['roomID']);
 
+            $res = UserModel::getInstance()->getUserInfo($userID, ['roomID']);
             if (isset($res['roomID']) && $res['roomID']) {
                 $this->error('用户在游戏中，不能充值');
             }
