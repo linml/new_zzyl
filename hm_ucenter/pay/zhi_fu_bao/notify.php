@@ -30,6 +30,7 @@ require_once dirname(dirname(__DIR__)) . '/' . 'helper' . '/' . 'LoadHelper.php'
 
 $data = $_POST;
 file_put_contents('paydata.txt', $data);
+\helper\LogHelper::printLog('BACKPAY', '支付回调数据信息'.json_encode($data));
 //订单是否存在
 if (!isset($data['out_trade_no'])) {
     AppModel::returnString('parameter error');
