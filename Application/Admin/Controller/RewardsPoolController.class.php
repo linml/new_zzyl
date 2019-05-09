@@ -312,10 +312,10 @@ GROUP BY
             $v['gamewinmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['gameWinMoney']); //今日游戏输赢钱   实时获取
             $v['allgamewinmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['allGameWinMoney']); //今日前累计游戏输赢钱  实时获取
             $v['platformcompensate'] = FunctionHelper::MoneyOutput((int)$rewsinfo['platformCompensate']); //平台补偿金币   实时获取
-//            实时奖池 = 今日游戏输赢钱 + 今日前累计游戏输赢钱 + 平台补偿金币
-//            平台盈利  =  实时奖池 + 平台银行储蓄 - 平台补偿金币
-            $v['sumgamewinmoney'] = $v['gamewinmoney'] + $v['allgamewinmoney'] + $v['platformcompensate']; //实时奖池   实时获取
+//            实时奖池 = 今日游戏输赢钱 + 今日前累计游戏输赢钱 + 平台补偿金币 - 平台银行储蓄
+//            平台盈利(机器人输赢总额)  =  实时奖池 + 平台银行储蓄 - 平台补偿金币
             $v['platformbankmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['platformBankMoney']); //平台银行储蓄   实时获取
+            $v['sumgamewinmoney'] = $v['gamewinmoney'] + $v['allgamewinmoney'] + $v['platformcompensate'] - $v['platformbankmoney']; //实时奖池   实时获取
             $v['platformprofitability'] = $v['sumgamewinmoney'] + $v['platformbankmoney'] - $v['platformcompensate']; //平台盈利
 
             $v['poolmoney'] = FunctionHelper::MoneyOutput((int)$v['poolmoney']);
@@ -432,13 +432,11 @@ GROUP BY
         $v['gamewinmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['gameWinMoney']); //今日游戏输赢钱   实时获取
         $v['allgamewinmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['allGameWinMoney']); //今日前累计游戏输赢钱  实时获取
         $v['platformcompensate'] = FunctionHelper::MoneyOutput((int)$rewsinfo['platformCompensate']); //平台补偿金币   实时获取
-//            实时奖池 = 今日游戏输赢钱 + 今日前累计游戏输赢钱 + 平台补偿金币
-//            平台盈(机器人输赢总额	)  =  实时奖池 + 平台银行储蓄(机器人赢钱回收金额) - 平台补偿金币
-        $v['sumgamewinmoney'] = $v['gamewinmoney'] + $v['allgamewinmoney'] + $v['platformcompensate']; //实时奖池   实时获取
-        //$v['sumgamewinmoney'] = 100;
+//            实时奖池 = 今日游戏输赢钱 + 今日前累计游戏输赢钱 + 平台补偿金币 - 平台银行储蓄
+//            平台盈利(机器人输赢总额)  =  实时奖池 + 平台银行储蓄 - 平台补偿金币
         $v['platformbankmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['platformBankMoney']); //平台银行储蓄   实时获取
+        $v['sumgamewinmoney'] = $v['gamewinmoney'] + $v['allgamewinmoney'] + $v['platformcompensate'] - $v['platformbankmoney']; //实时奖池   实时获取
         $v['platformprofitability'] = $v['sumgamewinmoney'] + $v['platformbankmoney'] - $v['platformcompensate']; //平台盈利
-        //$v['platformprofitability'] = 200;
 
         $v['poolmoney'] = FunctionHelper::MoneyOutput((int)$v['poolmoney']);
         $v['percentagewinmoney'] = FunctionHelper::MoneyOutput((int)$v['percentagewinmoney']);
