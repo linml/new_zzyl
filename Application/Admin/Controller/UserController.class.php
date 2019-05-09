@@ -713,9 +713,9 @@ class UserController extends AdminController
             if ($num > self::MAX_USER_RECHARGE) {
                 $this->error("单次充值不能超过" . self::MAX_USER_RECHARGE);
             }
-echo 77;exit;
+echo 77;
             $res = UserModel::getInstance()->getUserInfo($userID, ['roomID']);
-            var_dump($res);exit;
+
             if (isset($res['roomID']) && $res['roomID']) {
                 $this->error('用户在游戏中，不能充值');
             }
