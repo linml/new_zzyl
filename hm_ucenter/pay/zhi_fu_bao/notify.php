@@ -59,13 +59,16 @@ $signVerify = $client->rsaCheckV1($signVerifyData, null, 'RSA2');
 //$signVerify = $client->rsaSign($signVerifyData, $client->signType);
 //$sign = XinBaoPay::getInstance()->pay_sign($data);
 if (!$signVerify) {
+    \helper\LogHelper::printLog('BACKPAY', '支付回调数据信息11111'.$signVerify);
     AppModel::returnString('fail');
 }
 $consumeNum = FunctionHelper::moneyOutput($order['consumeNum'], $order['consumeType']);
 if ($_POST['total_amount'] != $consumeNum) {
+    \helper\LogHelper::printLog('BACKPAY', '支付回调数据信息2222'.$consumeNum);
     AppModel::returnString('fail');
 }
 if (!ZhiFuBaoPay::getInstance()->checkAppID($_POST['app_id'])) {
+    \helper\LogHelper::printLog('BACKPAY', '支付回调数据信息3333'.$_POST['app_id']);
     LogHelper::printError('校验失败' . __LINE__);
     AppModel::returnString('fail');
 }
