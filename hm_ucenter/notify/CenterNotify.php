@@ -152,6 +152,10 @@ final class CenterNotify
     public static function resourceChange($userID, $resourceType, $value, $changeValue, $reason = 0, $reserveData = 0, $isNotifyRoom = 0)
     {
         $struct = StructConfig::resourceChange($resourceType, $value, $changeValue, $reason, $reserveData, $isNotifyRoom);
+        var_dump(ProtocolConfig::PLATFORM_MESSAGE_RESOURCE_CHANGE);
+        var_dump($userID);
+        var_dump($struct);
+        var_dump(self::send(ProtocolConfig::PLATFORM_MESSAGE_RESOURCE_CHANGE, $userID, $struct));exit;
         return self::send(ProtocolConfig::PLATFORM_MESSAGE_RESOURCE_CHANGE, $userID, $struct);
     }
 
