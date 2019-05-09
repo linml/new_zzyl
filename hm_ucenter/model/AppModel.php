@@ -360,6 +360,7 @@ abstract class AppModel
             //推送火币变化 给俱乐部所有人
             CenterNotify::friendsGroupMemberFireCoinChangeAll($friendsGroupID, $fireCoinChangeInfoList);
         } else {
+            echo 3456;
             $res = CenterNotify::resourceChange($userID, $resourceType, $value, $change, $changeReason);
             LogHelper::printDebug('recharge----------------------------' . var_export($res, true));
         }

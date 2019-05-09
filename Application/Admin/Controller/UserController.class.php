@@ -693,7 +693,6 @@ class UserController extends AdminController
     public function user_recharge()
     {
         if (IS_POST) {
-            echo 33;exit;
             $userID = (int)I('userid');
             $type = (int)I('type');
             $num = $numLog = (int)I('amount');
@@ -711,8 +710,9 @@ class UserController extends AdminController
             if ($num > self::MAX_USER_RECHARGE) {
                 $this->error("单次充值不能超过" . self::MAX_USER_RECHARGE);
             }
-
+echo 33;
             $res = UserModel::getInstance()->getUserInfo($userID, ['roomID']);
+            var_dump($res);
             if (isset($res['roomID']) && $res['roomID']) {
                 $this->error('用户在游戏中，不能充值');
             }
