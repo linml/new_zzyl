@@ -693,6 +693,7 @@ class UserController extends AdminController
     public function user_recharge()
     {
         if (IS_POST) {
+            echo 33;exit;
             $userID = (int)I('userid');
             $type = (int)I('type');
             $num = $numLog = (int)I('amount');
