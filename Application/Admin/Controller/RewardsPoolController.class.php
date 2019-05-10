@@ -351,10 +351,10 @@ GROUP BY
                 'title' => '游戏名称',
                 'type' => ['type' => 'option', 'name' => 'roomID', 'attribution' => 'style="width:80px;"']
             ],
-            'platformprofitability' => [
+            /*'platformprofitability' => [
                 'key' => 'platformprofitability',
                 'title' => '机器人输赢总额',
-            ],
+            ],*/
             'sumgamewinmoney' => [
                 'key' => 'sumgamewinmoney',
                 'title' => '实时奖池',
