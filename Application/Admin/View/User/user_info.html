@@ -130,9 +130,10 @@
                 <tr>
                     <td>最近充值金额: {$user.last_recharge_money|default="0.00"}</td>
                     <td>在线状态: {$user.online_status_name}</td>
-                    <?php if (C('IS_SHOW_JEWELS')) { ?>
+                    <!--<?php if (C('IS_SHOW_JEWELS')) { ?>
                     <td>钻石: <?php echo $user['jewels'];?></td>
-                    <?php }?>
+                    <?php }?>-->
+                    <td>玩家身份：{$user.status_desc}</td>
                 </tr>
             </table>
         </div>
@@ -188,12 +189,13 @@
                 </tr>
                 
                 <tr>
-                    <td>累计转赠金币数: {$user.give_cost_money|default=0}</td>
+                    <td>身份为赢玩家时累计赢的金币数: {$user.curWinMoney|default=0}</td>
+                    <!--<td>累计转赠金币数: {$user.give_cost_money|default=0}</td>
                     <td>累计接收转赠金币数: {$user.give_get_money|default=0}</td>
                     <td>累计领取补助金币数: {$user.support_get_money|default=0}</td>
                     <if condition="1 == $is_show_jewels">
                     <td>累计转赠钻石数: {$user.give_cost_jewels|default=0}</td>
-                    </if>
+                    </if>-->
                 </tr>
                 <if condition="1 == $is_show_jewels">
                 <tr>

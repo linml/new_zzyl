@@ -461,9 +461,9 @@ GROUP BY
             $pmoney = (int)I('incrementofgoldcoin') * 100 + $platformCompensate['platformcompensate'];
             $result = LobbyModel::getInstance()->updateRewardsPool((int)I('roomID'), [
                 'poolMoney' => FunctionHelper::MoneyInput((int)I('poolmoney')),//奖池
-                'platformCtrlPercent' => (int)I('platformctrlpercent'),//单点控制千分比
-                'realPeopleWinPercent' => (int)I('realpeoplewinpercent'),
-                'realPeopleFailPercent' => (int)I('realpeoplefailpercent'),
+                'platformCtrlPercent' => (int)I('platformctrlpercent'),//单点控制千分比(输赢胜率千分比)
+                'realPeopleWinPercent' => (int)I('realpeoplewinpercent'),//真人玩家赢概率
+                'realPeopleFailPercent' => (int)I('realpeoplefailpercent'),//真人玩家输概率
                 'minPondMoney' => (int)I('minPondMoney') *100,
                 'maxPondMoney' => (int)I('maxPondMoney') *100,
                 //'recoveryPoint' => (int)I('recoverypoint') * 100,
