@@ -379,17 +379,17 @@ GROUP BY
             ],
             'platformctrlpercent' => [
                 'key' => 'platformctrlpercent',
-                'title' => '输赢胜率千分比',
+                'title' => '输赢胜率千分比<br/>(输入范围-1000 到 1000)',
                 'type' => ['type' => 'input', 'name' => 'platformctrlpercent', 'attribution' => 'style="width:80px;"']
             ],
             'realPeopleFailPercent' => [
                 'key' => 'realpeoplefailpercent',
-                'title' => '真人玩家输概率',
+                'title' => '真人玩家输概率<br/>(输入范围0 到 1000)',
                 'type' => ['type' => 'input', 'name' => 'realpeoplefailpercent', 'attribution' => 'style="width:80px;"']
             ],
             'realPeopleWinPercent' => [
                 'key' => 'realpeoplewinpercent',
-                'title' => '真人玩家赢概率',
+                'title' => '真人玩家赢概率<br/>(输入范围0 到 1000)',
                 'type' => ['type' => 'input', 'name' => 'realpeoplewinpercent', 'attribution' => 'style="width:80px;"']
             ],
             'minPondMoney' => [

@@ -188,9 +188,9 @@
                     dataType:'json',
                     success:function(data){
                         $('.current'+$currentroomid).find("input[name='roomID']").val(data.roomid);
-                        $('.current'+$currentroomid).children().eq(3).text(data.platformprofitability);
-                        $('.current'+$currentroomid).children().eq(4).text(data.sumgamewinmoney);
-                        $('.current'+$currentroomid).children().eq(5).text(data.platformcompensate);
+                        // $('.current'+$currentroomid).children().eq(3).text(data.platformprofitability);
+                        $('.current'+$currentroomid).children().eq(3).text(data.sumgamewinmoney);
+                        $('.current'+$currentroomid).children().eq(4).text(data.platformcompensate);
                         $('.current'+$currentroomid).find("input[name='incrementofgoldcoin']").val(data.incrementofgoldcoin);
                         $('.current'+$currentroomid).find("input[name='platformctrlpercent']").val(data.platformctrlpercent);
                         $('.current'+$currentroomid).find("input[name='realpeoplefailpercent']").val(data.realpeoplefailpercent);
@@ -211,7 +211,7 @@
                 var platformctrlpercent_old = $('.current'+roomid).find("input[name='platformctrlpercent']").val();
                 var platformctrlpercent_now = Math.abs(platformctrlpercent_old);
                 if(platformctrlpercent_now > 1000){
-                    layer.msg(option+"输赢胜率千分比绝对值不能大于1000");
+                    layer.msg(option+"输赢胜率千分比取值范围-1000到1000");
                     $('.current'+roomid).find("input[name='platformctrlpercent']").css("background-color","#263949");
                     //alert(option+"输赢胜率千分比绝对值不能大于1000");
                     return false;
@@ -219,7 +219,7 @@
 
                 var realpeoplefailpercent = $('.current'+roomid).find("input[name='realpeoplefailpercent']").val();
                 if(realpeoplefailpercent < 0 || realpeoplefailpercent > 1000){
-                    layer.msg(option+"真人玩家输概率不能大于1000小于0");
+                    layer.msg(option+"真人玩家输概率取值范围0到1000");
                     $('.current'+roomid).find("input[name='realpeoplefailpercent']").css("background-color","#263949")
                     //alert(option+"真人玩家输概率不能大于1000小于0");
                     return false;
@@ -227,7 +227,7 @@
 
                 var realpeoplewinpercent = $('.current'+roomid).find("input[name='realpeoplewinpercent']").val();
                 if(realpeoplewinpercent < 0 || realpeoplewinpercent > 1000){
-                    layer.msg(option+"真人玩家赢概率不能大于1000小于0");
+                    layer.msg(option+"真人玩家赢概率取值范围0到1000");
                     $('.current'+roomid).find("input[name='realpeoplewinpercent']").css("background-color","#263949")
                     //alert(option+"真人玩家赢概率不能大于1000小于0");
                     return false;
