@@ -134,6 +134,9 @@
                     <td>钻石: <?php echo $user['jewels'];?></td>
                     <?php }?>-->
                     <td>玩家身份：{$user.status_desc}</td>
+                    <if condition="$user.status == 2">
+                        <td>赢钱上限: {$user.moneyLimit|default=0}</td>
+                    </if>
                 </tr>
             </table>
         </div>

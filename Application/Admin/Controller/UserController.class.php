@@ -362,7 +362,8 @@ class UserController extends AdminController
         }
         $user['status_desc'] = rtrim($user['status_desc'], '|');
         $especialIdentityInfo = RedisManager::getGameRedis()->hGetAll("especialIdentityUser|".$userID);
-        $user['curWinMoney'] = $especialIdentityInfo['curWinMoney'];
+        $user['curWinMoney'] = $especialIdentityInfo['curWinMoney']/100;
+        $user['moneyLimit'] = $especialIdentityInfo['moneyLimit']/100;
 
         $this->assign('user', $user);
         $this->assign('user_operation', $user_operation);
@@ -1691,6 +1692,7 @@ class UserController extends AdminController
             }
             $user['status_desc'] = rtrim($user['status_desc'], '|');
             $info = RedisManager::getGameRedis()->hGetAll('especialIdentityUser|'.$userID);
+            $info['moneyLimit'] = $info['moneyLimit']/100;
             $this->assign("info",$info);
             $this->assign("user", $user);
             $this->assign('userid', $userID);
