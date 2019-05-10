@@ -1276,7 +1276,7 @@ class OperateController extends AdminController
             ->join('left join roomBaseInfo as R on R.roomID = S.roomID')
             ->where($where)
             ->limit($Page->firstRow . ',' . $Page->listRows)
-            ->order('time desc')
+            ->order('id desc')
             ->field('S.id,S.userID,U.name,U.account,S.time,S.money,S.changeMoney,S.reason,R.name as rname')
             ->select();
             // $arrMoney = GeneralConfig::STATISTICS_MONEYCHANGE_MONEY;
