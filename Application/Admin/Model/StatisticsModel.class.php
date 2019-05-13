@@ -45,9 +45,9 @@ class StatisticsModel extends Model
         $res = M()->query('select sum(changeMoney) as count from ' . MysqlConfig::Table_statistics_moneychange . ' where reason = ' . EnumConfig::E_ResourceChangeReason['CREATE_ROOM']);
         return isset($res[0]['count']) ? FunctionHelper::MoneyOutput($res[0]['count']) : 0;
     }
-    //机器人统计
+    //机器人总输赢
     public function allRobotMoney() {
-        $res = M()->query('select sum(gameWinMoney) as count from ' . MysqlConfig::Table_rewardspool);
+        $res = M()->query('select sum(gameWinMoney+allGameWinMoney) as count from ' . MysqlConfig::Table_rewardspool);
         return isset($res[0]['count']) ? FunctionHelper::MoneyOutput($res[0]['count']) : 0;
     }
 }
