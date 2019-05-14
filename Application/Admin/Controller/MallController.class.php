@@ -636,4 +636,61 @@ class MallController extends AdminController
 
         $this->display();
     }
+
+    //获取支付宝配置信息
+    public function zfbPayConfig()
+    {
+        $dataList = M('pay_config')->field('id,callback_server_PK,parnetID,name,app_id,private_key,status')->select();
+        $this->assign('dataList', $dataList);
+        /*array_walk($dataList, function(&$v, $k) {
+            $v['payTypeName'] = EnumConfig::E_PayTypeName[$v['type']];
+        });
+        $payType = EnumConfig::E_PayType;
+        $payTypeList = [];
+        foreach ($payType as $k => $v) {
+            $payTypeList[] = [
+                'type' => $v,
+                'typeName' => EnumConfig::E_PayTypeName[$v],
+            ];
+        }
+        $this->assign([
+            'payTypeList' => $payTypeList,
+        ]);*/
+//        var_export($dataList);
+        $this->display();
+    }
+
+    //修改或者添加配置信息
+    public function zfb_edit_pay_config()
+    {
+
+            $post = I('post.');
+            if (empty($post['callback_server_PK'])) {
+                $this->error('支付宝公钥不能为空');
+            }
+
+            if (empty($post['app_id'])) {
+                $this->error('支付应用ID不能为空');
+            }
+            if (empty($post['parnetID'])) {
+                $this->error('支付宝账号id不能为空');
+            }
+            $resPayConfig = M()->table(MysqlConfig::Table_web_pay_config)->where(['type' => $post['type'], 'status' => EnumConfig::E_PayTypeStatus['OPEN']])->find();
+            if ($resPayConfig && $post['id'] != $resPayConfig['id'] && $post['status'] == EnumConfig::E_PayTypeStatus['OPEN']) {
+                $this->error('同一类型支付，只能有一个启用');
+            }
+
+            //修改商品
+            if (M('pay_config')->save($post)) {
+                $this->success('修改成功');
+            } else {
+                $this->error('修改失败');
+            }
+
+
+
+
+
+    }
+
 }

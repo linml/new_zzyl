@@ -1,0 +1,70 @@
+<extend name="Public/base"/>
+<block name="body">
+    <style>
+        @media (max-width: 768px){
+            #box{width: 1000px;}
+        }
+    </style>
+    <div class="wrapper wrapper-content animated fadeInRight" style="width:100%;">
+        <div class="row" >
+            <div class="col-sm-12">
+                <div class="panel panel-info" id="box">
+                    <div class="panel-body">
+                        <table class="table table-striped table-bordered table-hover" id="my-info">
+                            <tr>
+                                <th style="width: 30px;">id</th>
+
+
+                                <th style="width: 100px;">名字</th>
+                                <th style="width: 150px;">应用ID</th>
+
+                                <th >私钥</th>
+
+                                <th>回调服务器公钥<br><sub>(如支付宝公钥)</sub></th>
+                                <th>合作伙伴身份<br><sub>(如支付宝账号id)</sub></th>
+
+                                <th style="width: 60px;">是否启用</th>
+                                <th style="width: 150px;">操作</th>
+                            </tr>
+
+                            <volist name="dataList" id="config">
+                                <form action="{:U('zfb_edit_pay_config')}" method="post" onsubmit="return ajax_post(this);">
+                                    <tr>
+                                        <td>{$config['id']}
+                                            <input type="hidden" name="id" value="{$config['id']}">
+                                        </td>
+
+                                        <td>{$config.name}</td>
+                                        <td><input type="text" name="app_id" class="form-control" value="{$config.app_id}"></td>
+
+                                        <td><input type="text" name="private_key" class="form-control" value="{$config.private_key}"></td>
+
+                                        <td><input type="text" name="callback_server_PK" class="form-control" value="{$config.callback_server_pk}"></td>
+                                        <td><input type="text" name="parnetID" class="form-control" value="{$config.parnetid}"></td>
+
+                                        <td>
+                                            <if condition="($config.status eq 0)">
+                                                <font color="red">否</font>
+                                                <elseif condition="($config.status eq 1)"/>
+                                                <font color="green">是</font>
+                                            </if>
+                                            <select name="status">
+                                                <option value="0" <if condition="($config.status eq 0)"> selected</if> >否</option>
+                                                <option value="1" <if condition="($config.status eq 1)"> selected</if> >是</option>
+                                            </select>
+
+                                        </td>
+                                        <td colspan="6">
+                                            <button type="submit" class="btn btn-success btn-outline">确认修改</button>
+                                        </td>
+                                    </tr>
+                                </form>
+                            </volist>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</block>
