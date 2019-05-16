@@ -1001,6 +1001,14 @@ class ClubAction extends AppAction
         if (!$exists) {
             AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_TARGETUSER_DO_NOT_EXIST);
         }
+
+        //判断该目标用户是否在俱乐部里面
+        $result = ClubModel::getInstance()->getFriendsGroupMemberList($friendsGroupID);
+        $arr_id = array_column($result, 'userID');
+        if(!in_array($tarUserID, $arr_id)){
+            AppModel::returnJson(ErrorConfig::ERROR_CODE, "该成员不是该俱乐部的成员!");
+        }
+        
         //充值或者回收0
         if ($changeFireCoin == 0) {
             AppModel::returnJson(ErrorConfig::ERROR_CODE, "充值或者回收" . EnumConfig::E_ResourceTypeNames[EnumConfig::E_ResourceType['FIRECOIN']] . "不能为0");
