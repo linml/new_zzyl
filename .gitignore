@@ -11,3 +11,7 @@ plat_version.txt
 test_plat_version.txt
 test_version.txt
 version.txt
+.htaccess
+.user.ini
+404.html
+index.html
