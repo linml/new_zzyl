@@ -2444,7 +2444,7 @@ class UserController extends AdminController
                 var_dump($adminCash);
                 var_dump($clientCash);exit;
             }*/
-            $dbUser['sumCash'] = $adminCash['sumresourcenum'] + $clientCash['sumcash_money'];
+            $dbUser['sumCash'] = $adminCash['sumresourcenum']/100 + $clientCash['sumcash_money'];
 
             //提现次数
             $dbUser['cashCount'] = $adminCash['number'] + $clientCash['number'];
