@@ -81,7 +81,10 @@ class BankAction extends AppAction
             AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_INCORRECT_MAILBOX_FORMAT);
         }*/
 
-        $resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['phone','phonePasswd'], "userID = {$userID}");
+        $userID = $userID;
+        $needData = ['phone', 'phonePasswd'];
+        $resinfo = UserModel::getInstance()->getUserInfo($userID, $needData);
+        //$userinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['phone','phonePasswd'], "userID = {$userID}");
 
         //验证密码不能等于登录密码
         if(md5($inputpasswd) == $resinfo['phonePasswd']){
@@ -101,7 +104,7 @@ class BankAction extends AppAction
             AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_BIND_PHONE_CODE_TOO);
         }
 
-        BankModel::getInstance()->updateUserInfo($userID, 'bankPasswd',"'".$inputpasswd."'");
+        BankModel::getInstance()->updateUserInfo($userID, 'bankPasswd', $inputpasswd);
         AppModel::returnJson(ErrorConfig::SUCCESS_CODE, ErrorConfig::SUCCESS_MSG_DEFAULT);
     }
 
@@ -123,7 +126,10 @@ class BankAction extends AppAction
         }
 
         //$bankPasswd = BankModel::getInstance()->getUserInfo($userID, 'bankPasswd');
-        $resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['phone', 'phonePasswd', 'bankpasswd'], "userID = {$userID}");
+        $userID = $userID;
+        $needData = ['phone', 'phonePasswd'];
+        $resinfo = UserModel::getInstance()->getUserInfo($userID, $needData);
+        //$resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['phone', 'phonePasswd', 'bankpasswd'], "userID = {$userID}");
 
         // 原密码不正确
         if ($resinfo['bankpasswd'] != $oldPasswd) {
@@ -181,7 +187,7 @@ class BankAction extends AppAction
             AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_BANK_PASSWD_ISNUMBER);
         }*/
 
-        BankModel::getInstance()->updateUserInfo($userID, 'bankPasswd',"'".$newPasswd."'");
+        BankModel::getInstance()->updateUserInfo($userID, 'bankPasswd', $newPasswd);
         AppModel::returnJson(ErrorConfig::SUCCESS_CODE, ErrorConfig::SUCCESS_MSG_DEFAULT);
     }
 
