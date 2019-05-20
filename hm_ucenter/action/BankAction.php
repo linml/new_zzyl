@@ -132,12 +132,12 @@ class BankAction extends AppAction
         //$resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['phone', 'phonePasswd', 'bankpasswd'], "userID = {$userID}");
 
         // 原密码不正确
-        if ($resinfo['bankpasswd'] != $oldPasswd) {
+        if ($resinfo['bankPasswd'] != $oldPasswd) {
             AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_BANK_OLDPASSWD_YES);
         }
 
         //新密码和原始密码不能一致
-        if($resinfo['bankpasswd'] == $newPasswd){
+        if($resinfo['bankPasswd'] == $newPasswd){
             AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_BANK_OLDPASSWD_OLD_NEW);
         }
 
