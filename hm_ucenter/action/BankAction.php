@@ -362,7 +362,9 @@ class BankAction extends AppAction
         }
 
         //$bankPasswd = BankModel::getInstance()->getUserInfo($userID, 'bankPasswd');
-        $resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['phone', 'phonePasswd'], "userID = {$userID}");
+        $needData = ['phone', 'phonePasswd', 'bankPasswd'];
+        $resinfo = UserModel::getInstance()->getUserInfo($userID, $needData);
+        //$resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['phone', 'phonePasswd'], "userID = {$userID}");
 
         //验证密码格式 包含字母、数字以及下划线，且至少包含2种
         $myreg = "/^(?![0-9]+$)(?![_]+$)(?![a-zA-Z]+$)[A-Za-z_0-9]{1,}$/";
@@ -412,7 +414,7 @@ class BankAction extends AppAction
         //银行密码统计信息
         UserModel::getInstance()->addWebUserInfoValue($userID,'passwordBankCount');
 
-        BankModel::getInstance()->updateUserInfo($userID, 'bankPasswd',"'".$newPasswd."'");
+        BankModel::getInstance()->updateUserInfo($userID, 'bankPasswd',$newPasswd);
         AppModel::returnJson(ErrorConfig::SUCCESS_CODE, ErrorConfig::SUCCESS_MSG_DEFAULT);
     }
 
@@ -425,8 +427,10 @@ class BankAction extends AppAction
         $userID = (int)$param['userID']; // 用户ID
         $password = $param['password']; //密码
         if(empty($userID) || empty($password)) AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_NOT_PARAMETER);
-        $resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['bankpasswd'], "userID = {$userID}");
-        if($password != $resinfo['bankpasswd']) AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_BANK_PASSWD_YES);
+        //$resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['bankpasswd'], "userID = {$userID}");
+        $needData = ['phone', 'phonePasswd', 'bankPasswd'];
+        $resinfo = UserModel::getInstance()->getUserInfo($userID, $needData);
+        if($password != $resinfo['bankPasswd']) AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_BANK_PASSWD_YES);
         AppModel::returnJson(ErrorConfig::SUCCESS_CODE, ErrorConfig::SUCCESS_MSG_DEFAULT);
     }
 }
