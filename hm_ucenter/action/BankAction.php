@@ -127,7 +127,7 @@ class BankAction extends AppAction
 
         //$bankPasswd = BankModel::getInstance()->getUserInfo($userID, 'bankPasswd');
         $userID = $userID;
-        $needData = ['phone', 'phonePasswd', 'bankpasswd'];
+        $needData = ['phone', 'phonePasswd', 'bankPasswd'];
         $resinfo = UserModel::getInstance()->getUserInfo($userID, $needData);
         //$resinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, ['phone', 'phonePasswd', 'bankpasswd'], "userID = {$userID}");
 
