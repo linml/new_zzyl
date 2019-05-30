@@ -246,8 +246,10 @@ class WechatController extends Controller
                     exit;
                 } elseif (EnumConfig::E_ShareCodeRewardStatus['NONE'] == $dataExists['status'] || EnumConfig::E_ShareCodeRewardStatus['NOT'] == $dataExists['status']) {
                     LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
-                    // 更新 只有当分享的人不是自己的时候才执行更新操作
-                    if($dataExists['userid'] != $invite_userid){
+                    // 更新 只有当分享的人不是自己的时候才执行更新操作 并且分享的人的保底金额要大于当前下载的人的保底金额
+                    //查询出当前下载用户的保底金额
+                    $current_userinfo = M('agentMember')->where(['userid' => $dataExists['userid']])->find();
+                    if($dataExists['userid'] != $invite_userid && $isagentid['new_agent_leval_money'] > $current_userinfo['new_agent_leval_money']){
                         M('share_code')->where(['id' => $dataExists['id']])->save($data);
                     }
                     header('location:http://' . $this->domain . '/download/fx.php');
