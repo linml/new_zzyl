@@ -246,8 +246,10 @@ class WechatController extends Controller
                     exit;
                 } elseif (EnumConfig::E_ShareCodeRewardStatus['NONE'] == $dataExists['status'] || EnumConfig::E_ShareCodeRewardStatus['NOT'] == $dataExists['status']) {
                     LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
-                    // 更新
-                    M('share_code')->where(['id' => $dataExists['id']])->save($data);
+                    // 更新 只有当分享的人不是自己的时候才执行更新操作
+                    if($dataExists['userid'] != $invite_userid){
+                        M('share_code')->where(['id' => $dataExists['id']])->save($data);
+                    }
                     header('location:http://' . $this->domain . '/download/fx.php');
                     exit;
                 }
