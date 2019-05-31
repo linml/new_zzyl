@@ -27,8 +27,8 @@
                     <div class="ibox-content">
                         <div class="row" style="width:100%;line-height: 30px;">
                             <form action="{:U()}" method="get">
-                                <div class="col-sm-5 m-b-xs" style="width: 150px;">
-                                    <select class="input-sm form-control input-s-sm inline" name="type">
+                                <div class="col-sm-5 m-b-xs" style="width: 10px;">
+                                    <!--<select class="input-sm form-control input-s-sm inline" name="type">
                                         <option value="0">请选择</option>
                                         <option value="1"
                                         <if condition="$type eq 1"> selected</if>
@@ -36,11 +36,11 @@
                                         <option value="2"
                                         <if condition="$type eq 2"> selected</if>
                                         >用户昵称</option>
-                                    </select>
+                                    </select>-->
                                 </div>
                                 <div class="col-sm-3 top-menu t1" style="width: 200px;">
                                     <div class="input-group">
-                                        <input type="text" placeholder="请输入关键词" class="input-sm form-control"
+                                        <input type="text" placeholder="请输入ID或昵称搜索" class="input-sm form-control"
                                                name="search" value="{$search}"> <span class="input-group-btn"/>
 
                                     </div>
@@ -103,7 +103,7 @@
                                                 </font>
                                             </a>
                                         </td>
-                                        <td>{$_data.nickname}</td>
+                                        <td>{$_data.name}</td>
                                         <td>{$_data.create_time}</td>
                                         <td>{$_data.process_time}</td>
                                         <td>{$_data.cash_account_type_text}</td>

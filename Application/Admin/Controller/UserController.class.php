@@ -23,7 +23,7 @@ class UserController extends AdminController
     //用户管理
     public function user_list()
     {
-        $type = I('type');
+        //$type = I('type');
         $search = I('search');
         $is_super = I('is_super', false);
         $is_online = I('is_online', false);
@@ -31,7 +31,7 @@ class UserController extends AdminController
         //只查玩家
         $where['U.isVirtual'] = EnumConfig::E_GameUserType['PLAYER'];
 
-        if ($type && $search) {
+        /*if ($type && $search) {
             switch ($type) {
                 case 1:
                     $where['U.userID'] = $search;
@@ -42,8 +42,8 @@ class UserController extends AdminController
             }
         } else {
             $search = '';
-        }
-
+        }*/
+        $where['U.name|U.userID|U.macAddr|U.registerIP'] = ['like', "%{$search}%"];
         // 查超端用户
         /*if ($is_super) {
             //权限最大值 或运算
@@ -377,10 +377,10 @@ class UserController extends AdminController
 
         $start = urldecode(I('start'));
         $stop = urldecode(I('stop'));
-        $type = I('type');
+        //$type = I('type');
         $search = trim(I('search'));
 
-        if ($type && $search) {
+        /*if ($type && $search) {
             switch ($type) {
                 case 1:
                     $map['u.userID'] = $search;
@@ -392,7 +392,8 @@ class UserController extends AdminController
                     $map['ip'] = $search;
                     break;
             }
-        }
+        }*/
+        $map['u.userID|u.name|c.ip|u.macaddr'] = ['like', "%{$search}%"];
         // if ($start && $stop) {
         //     $start = strtotime($start);
         //     $stop = strtotime($stop);
@@ -448,10 +449,11 @@ class UserController extends AdminController
 
         $start = urldecode(I('start'));
         $stop = urldecode(I('stop'));
-        $type = I('type');
+        //$type = I('type');
         $search = I('search');
 
-        if ($type && $search) {
+        $map['u.userID|u.name|c.ip|c.macaddr'] = ['like', "%{$search}%"];
+        /*if ($type && $search) {
             switch ($type) {
                 case 1:
                     $map['u.userID'] = $search;
@@ -463,7 +465,7 @@ class UserController extends AdminController
                     $map['ip'] = $search;
                     break;
             }
-        }
+        }*/
         // if ($start && $stop) {
         //     $start = strtotime($start);
         //     $stop = strtotime($stop);
@@ -2168,7 +2170,7 @@ class UserController extends AdminController
      * */
     function cash_management_list()
     {
-        $type = I('type');
+        //$type = I('type');
         $search = I('search');
 
         $is_super = I('is_super', false);
@@ -2177,7 +2179,7 @@ class UserController extends AdminController
 
         $where = [];
 
-        if ($type && $search) {
+        /*if ($type && $search) {
             switch ($type) {
                 case 1:
                     $where['uif.userID'] = $search;
@@ -2188,7 +2190,8 @@ class UserController extends AdminController
             }
         } else {
             $search = '';
-        }
+        }*/
+        $where['uif.name|uif.userID'] = ['like', "%{$search}%"];
 
         // 查询提现中
         if ($is_super) {
@@ -2211,7 +2214,7 @@ class UserController extends AdminController
             ->table('user_cash_application as U')
             ->join('left join userInfo as uif on uif.userID=U.userID')
             ->where($where)
-            ->field('U.Id, U.userID, U.transferable_amount, U.remarks, U.nickname, U.create_time, U.process_time, U.cash_account_type, U.cash_status, U.cash_money, U.cash_withdrawal, U.cash_rate, U.cash_remarks')
+            ->field('U.Id, U.userID, U.transferable_amount, U.remarks, uif.name, U.nickname, U.create_time, U.process_time, U.cash_account_type, U.cash_status, U.cash_money, U.cash_withdrawal, U.cash_rate, U.cash_remarks')
             ->order('U.Id desc')
             ->limit($page->firstRow . ',' . $page->listRows)
             ->select();
@@ -2346,7 +2349,7 @@ class UserController extends AdminController
     //玩家资金列表
     public function player_Funds_List()
     {
-        $type = I('type');
+        //$type = I('type');
         $search = I('search');
         $is_super = I('is_super', false);
         $is_online = I('is_online', false);
@@ -2354,7 +2357,7 @@ class UserController extends AdminController
         //只查玩家
         $where['U.isVirtual'] = EnumConfig::E_GameUserType['PLAYER'];
 
-        if ($type && $search) {
+        /*if ($type && $search) {
             switch ($type) {
                 case 1:
                     $where['U.userID'] = $search;
@@ -2365,7 +2368,9 @@ class UserController extends AdminController
             }
         } else {
             $search = '';
-        }
+        }*/
+
+        $where['U.name|U.userID'] = ['like', "%{$search}%"];
 
         // 查超端用户
         /*if ($is_super) {
@@ -2417,7 +2422,7 @@ class UserController extends AdminController
             ->table('userInfo as U')
             ->join('left join roomBaseInfo as rbi on rbi.roomID = U.roomID')
             ->where($where)
-            ->field('U.userID, U.name, U.money, U.sealFinishTime, rbi.name as roomname, U.lastCrossDayTime, U.registerTime, U.IsOnline')
+            ->field('U.userID, U.phone, U.name, U.money, U.sealFinishTime, rbi.name as roomname, U.lastCrossDayTime, U.registerTime, U.IsOnline')
             ->limit($page->firstRow . ',' . $page->listRows)
             ->select();
         //var_dump($dbUserList);exit;
@@ -2429,22 +2434,34 @@ class UserController extends AdminController
             //客户端充值总金额
             $clientRechargeMoney = M()->table('web_pay_orders')->where(['status' => 1, 'userID' => $dbUser['userid']])->sum('buyNum');
             //总充值
-            /*if($dbUser['userid'] == 122004){
-                var_dump($adminRechargeMoney);
-                var_dump($clientRechargeMoney);exit;
-            }*/
             $dbUser['sumRechargeMoney'] = $adminRechargeMoney + $clientRechargeMoney/100;
+
+
+            $starttime = strtotime(date('Y-m-d', time()));
+            //今天后台充值总金额
+            $dayadminRechargeMoney = M()->table('web_admin_action')->where(['actionType' => 1, 'userID' => $dbUser['userid'], 'actionTime' => ['between', [$starttime, time()]]])->sum('resourceNum');
+            //今日客户端充值总金额
+            $dayclientRechargeMoney = M()->table('web_pay_orders')->where(['status' => 1, 'userID' => $dbUser['userid'], 'create_time' => ['between', [$starttime, time()]]])->sum('buyNum');
+            //今日总充值
+            $dbUser['daysumRechargeMoney'] = $dayadminRechargeMoney + $dayclientRechargeMoney/100;
+
 
             //后台提现
             $adminCash = M()->table('web_admin_action')->where(['actionType' => 2, 'userID' => $dbUser['userid']])->field('sum(resourceNum) as sumresourceNum, count(*) as number')->find();
             //客户端提现即兑换
             $clientCash = M()->table('user_cash_application')->where(['cash_status' => 2, 'userID' => $dbUser['userid']])->field('sum(cash_money) as sumcash_money, count(*) as number')->find();
             //总提现
-            /*if($dbUser['userid'] == 122004){
-                var_dump($adminCash);
-                var_dump($clientCash);exit;
-            }*/
             $dbUser['sumCash'] = $adminCash['sumresourcenum']/100 + $clientCash['sumcash_money'];
+
+            //今日后台提现
+            $dayadminCash = M()->table('web_admin_action')->where(['actionType' => 2, 'userID' => $dbUser['userid'], 'actionTime' => ['between', [$starttime, time()]]])->field('sum(resourceNum) as sumresourceNum, count(*) as number')->find();
+            //今日客户端提现即兑换
+            $dayclientCash = M()->table('user_cash_application')->where(['cash_status' => 2, 'userID' => $dbUser['userid'], 'create_time' => ['between', [$starttime, time()]]])->field('sum(cash_money) as sumcash_money, count(*) as number')->find();
+            //今日总提现
+            $dbUser['daysumCash'] = $dayadminCash['sumresourcenum']/100 + $dayclientCash['sumcash_money'];
+
+            //保险箱余额
+            $dbUser['bankMoney'] = RedisManager::getGameRedis()->hGet(GameRedisConfig::Hash_userInfo . '|' . $userID, 'bankMoney');
 
             //提现次数
             $dbUser['cashCount'] = $adminCash['number'] + $clientCash['number'];
@@ -2505,6 +2522,65 @@ class UserController extends AdminController
 
         $this->assign('_page', $page->show());
         $this->assign('_data', $dbUserList);
+        $this->display();
+    }
+
+    /*
+     * 游戏输赢列表
+     * */
+    function game_win_list()
+    {
+        $map = [];
+
+        $start = urldecode(I('start'));
+        $stop = urldecode(I('stop'));
+        $search = I('search');
+
+        $res = validSearchTimeRange($start, $stop);
+        if (ErrorConfig::ERROR_CODE === $res['code']) {
+            $this->error($res['msg']);
+        } else {
+            $map['sm.time'] = $res['data'];
+        }
+        $map['sm.reason'] = ['in', [3,8]];
+        $map['sm.userID'] = ['like', "%{$search}%"];
+        //var_dump($map);exit;
+
+
+        /*$count = M()->table('statistics_moneychange as sm')
+            ->join('left join roombaseinfo as rbi on rbi.roomID = sm.roomID')
+            ->where($map)
+            //->fetchSql()
+            ->count();*/
+        $dataList = M()
+            ->table('statistics_moneychange as sm')
+            ->join('left join roombaseinfo as rbi on rbi.roomID = sm.roomID')
+            ->where($map)
+            ->field("sm.userID, FROM_UNIXTIME(sm.time, '%Y-%m-%d') days, rbi.name, sum(changeMoney) money")
+            ->group('sm.userID, sm.roomID, days')
+            ->order('sm.time desc')
+            //->fetchsql()
+            ->select();
+        //var_dump($dataList);exit;
+        $page = new \Think\Page(count($dataList), 20);
+        $dbUserList = M()
+            ->table('statistics_moneychange as sm')
+            ->join('left join roombaseinfo as rbi on rbi.roomID = sm.roomID')
+            ->where($map)
+            ->field("sm.userID, FROM_UNIXTIME(sm.time, '%Y-%m-%d') days, rbi.name, round(sum(changeMoney)/100, 2) money")
+            ->group('sm.userID, sm.roomID, days')
+            ->limit($page->firstRow . ',' . $page->listRows)
+            ->order('sm.time desc')
+            //->fetchsql()
+            ->select();
+        //var_dump($dbUserList);exit;
+
+        $this->assign('start', $start);
+        $this->assign('stop', $stop);
+        $this->assign('search', $search);
+        $this->assign('_page', $page->show());
+        $this->assign('_data', $dbUserList);
+        $this->assign('b', 100);
         $this->display();
     }
 

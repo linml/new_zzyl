@@ -49,9 +49,9 @@ abstract class AppAction
             $this->checkRequest();
         }
 
-        if ($this->_check_play_game) {
+        /*if ($this->_check_play_game) {
             $this->checkUserPlayGame($_REQUEST['userID']);
-        }
+        }*/
     }
 
     // protected function __destruct() {

@@ -27,8 +27,8 @@
                     <div class="ibox-content">
                         <div class="row" style="width:100%;line-height: 30px;">
                             <form action="{:U()}" method="get">
-                                <div class="col-sm-5 m-b-xs" style="width: 150px;">
-                                    <select class="input-sm form-control input-s-sm inline" name="type">
+                                <div class="col-sm-5 m-b-xs" style="width: 5px;">
+                                    <!--<select class="input-sm form-control input-s-sm inline" name="type">
                                         <option value="0">请选择</option>
                                         <option value="1">
                                             <if condition="$type eq 1"> selected</if>
@@ -36,11 +36,11 @@
                                         <option value="2">
                                             <if condition="$type eq 2"> selected</if>
                                             >用户昵称</option>
-                                    </select>
+                                    </select>-->
                                 </div>
-                                <div class="col-sm-3 top-menu t1" style="width: 200px;">
+                                <div class="col-sm-3 top-menu t1" style="width: 220px;">
                                     <div class="input-group">
-                                        <input type="text" placeholder="请输入关键词" class="input-sm form-control"
+                                        <input type="text" placeholder="请输入ID或昵称搜索" class="input-sm form-control"
                                                name="search" value="{$search}"> <span class="input-group-btn"/>
 
                                     </div>
@@ -98,10 +98,14 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>用户ID</th>
+                                    <th>用户id</th>
+                                    <th>手机号</th>
                                     <th>用户昵称</th>
                                     <th>总充值金额</th>
+                                    <th>今日充值金额</th>
                                     <th>总提现金额</th>
+                                    <th>今日提现金额</th>
+                                    <th>保险箱余额</th>
                                     <th>提现次数</th>
                                     <th>金币</th>
                                     <th>注册时间</th>
@@ -115,9 +119,13 @@
                                 <volist name="_data" id="_data">
                                     <tr>
                                         <td>{$_data.userid}</td>
+                                        <td>{$_data.phone}</td>
                                         <td>{$_data.name}</td>
                                         <td>{$_data.sumRechargeMoney|default=0}</td>
+                                        <td>{$_data.daysumRechargeMoney|default=0}</td>
                                         <td>{$_data.sumCash|default=0}</td>
+                                        <td>{$_data.daysumCash|default=0}</td>
+                                        <td>{$_data.bankMoney|default=0}</td>
                                         <td>{$_data.cashCount|default=0}</td>
                                         <td>{$_data.money|default=0}</td>
                                         <td>{$_data.registertime|date="Y-m-d H:i:s",###}</td>
