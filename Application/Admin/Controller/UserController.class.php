@@ -2554,7 +2554,7 @@ class UserController extends AdminController
             ->count();*/
         $dataList = M()
             ->table('statistics_moneychange as sm')
-            ->join('left join roombaseinfo as rbi on rbi.roomID = sm.roomID')
+            ->join('left join roomBaseInfo as rbi on rbi.roomID = sm.roomID')
             ->where($map)
             ->field("sm.userID, FROM_UNIXTIME(sm.time, '%Y-%m-%d') days, rbi.name, sum(changeMoney) money")
             ->group('sm.userID, sm.roomID, days')
@@ -2565,7 +2565,7 @@ class UserController extends AdminController
         $page = new \Think\Page(count($dataList), 20);
         $dbUserList = M()
             ->table('statistics_moneychange as sm')
-            ->join('left join roombaseinfo as rbi on rbi.roomID = sm.roomID')
+            ->join('left join roomBaseInfo as rbi on rbi.roomID = sm.roomID')
             ->where($map)
             ->field("sm.userID, FROM_UNIXTIME(sm.time, '%Y-%m-%d') days, rbi.name, round(sum(changeMoney)/100, 2) money")
             ->group('sm.userID, sm.roomID, days')
