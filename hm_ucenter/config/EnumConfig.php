@@ -381,6 +381,7 @@ final class EnumConfig
         'MA_FU' => 8,
         'ZHI_FU_BAO' => 9,
         'HUI_TONG' => 10, //汇通支付
+        'ALI_SAOMAZHIFU' => 11, //支付宝扫码支付，收款账户为个人
     );
     //支付类型名
     const E_PayTypeName = array(

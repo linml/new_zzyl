@@ -19,6 +19,9 @@ use pay\ma_fu\MaFuPay;
 use pay\zhi_fu_bao\ZhiFuBaoPay;
 use pay\hui_tong\HuiTongPay;
 use pay\hui_tong\Notify;
+use config\aliPaySmzfpertoinConfig;
+use pay\hui_tong\newNotify;
+
 
 /**
  * 支付业务
@@ -33,7 +36,7 @@ class PayAction extends AppAction
         return (!self::$_instance instanceof self) ? (new self()) : self::$_instance;
     }
 
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
@@ -105,6 +108,76 @@ class PayAction extends AppAction
         if (!UserModel::getInstance()->isUserExists($userID)) {
             return ['code' => ErrorConfig::ERROR_CODE, 'msg' => '用户不存在'];
         }
+    }
+
+    /**
+     * 支付宝扫码支付，支付宝H2支付，个人对个人
+     * @param $params
+     */
+    public function aliPaySmzfpertoin($params)
+    {
+        if (empty($params['userID']) || empty($params['goodsID'])) {
+            AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_NOT_PARAMETER);
+        }
+        $res = $this->verifyThirdPay($params);
+        if (ErrorConfig::ERROR_CODE == $res['code']) {
+            AppModel::returnJson(ErrorConfig::ERROR_CODE, $res['msg']);
+        }
+
+        $pay_result = $this->doPayPrepare(11, $params);
+        //var_dump($pay_result);exit;
+        LogHelper::printDebug(['payresult' => $pay_result, 'type' => 11, 'params' => $params]);
+        if ($pay_result['status'] == ErrorConfig::SUCCESS_CODE) {
+            $pay_result['data']['pay_type'] = 11;
+            $pay_result['data']['orderStr'] = $pay_result['orderStr'];
+            $this->returnPayResult($pay_result);
+        }
+
+        AppModel::returnJson(ErrorConfig::ERROR_CODE, "支付失败");
+        $this->returnPayResult($pay_result);
+    }
+
+    /**
+     * 支付宝扫码支付，支付宝H2支付，个人对个人  回调通知
+     * @param $params
+     */
+    public function aliPaySmzfpertoin_callback($param)
+    {
+        /*$result = file_get_contents('php://input');
+        LogHelper::printLog('PAY', '支付宝扫码支付回调返回参数111'.$param);*/
+        LogHelper::printLog('PAY', '支付宝扫码支付回调返回参数222'.json_encode($param));
+        $callbackObj = newNotify::getInstance();
+        $callbackObj->notify_callback();
+        /*$callbackObj = Notify::getInstance();
+        $callbackObj->updata_order('20190417134701811605122005');
+        AppModel::returnJson(ErrorConfig::SUCCESS_CODE, ErrorConfig::SUCCESS_MSG_DEFAULT);*/
+
+    }
+
+    /**
+     * 支付宝扫码支付，支付宝H2支付，个人对个人  订单查询
+     * @param $params
+     */
+    public function show_aliPaySmzfpertoin_callback($requestId,$order_sn)
+    {
+        /*$requestId = '20190604200640287';
+        $order_sn = '20190604200640000000122001';*/
+        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+            require_once dirname(__DIR__) . '\smzf-php-demo\erweima.php';
+        }else{
+            require_once dirname(__DIR__) . '/php/erweima.php';
+        }
+
+        $merconfig = aliPaySmzfpertoinConfig::MERCONFIG;
+        $imgopj = new \TradeClient($merconfig);
+
+
+        //$array = ['deviceType' => $deviceType, 'payWay' => EnumConfig::E_PayWay['WIN_XIN']];
+        $pay_result = $imgopj->orderQuery($requestId, $order_sn);
+        echo 33;
+        var_dump($pay_result);exit;
+        return $pay_result;
+
     }
 
     /**
@@ -248,11 +321,76 @@ class PayAction extends AppAction
             case EnumConfig::E_PayType['HUI_TONG']:
                 $pay_result = $this->doPay($params, HuiTongPay::getInstance());
                 break;
+            case EnumConfig::E_PayType['ALI_SAOMAZHIFU']:
+                $pay_result = $this->doPay_new($params);
+                break;
             default:
                 AppModel::returnJson(ErrorConfig::ERROR_CODE, "sdk不存在");
                 break;
 
         }
+        return $pay_result;
+    }
+
+    /**
+     * 生成订单ID
+     * @param $userID
+     * @return string
+     */
+    public function makeOrderID($userID)
+    {
+        //毫秒
+        $order_time = date('YmdHisu', time());
+        $order_sn = $order_time . $userID;
+        return $order_sn;
+    }
+
+    protected function createOrder($goods, $userID, $order_sn = '', $desc = '')
+    {
+        if ($order_sn == '') {
+            $order_sn = $this->makeOrderID($userID);
+        }
+
+        if ($desc == '') {
+            $desc = $this->_name;
+        }
+
+        return PayModel::getInstance()->addOrder($goods, $userID, $order_sn, $desc);
+    }
+
+    private function doPay_new($params)
+    {
+        $goodsID = (int)$params['goodsID'];
+        $userID = (int)$params['userID'];
+        $deviceType = (int)$params['deviceType'];
+        //获取购买商品信息
+        $goods = PayModel::getInstance()->getGoodsId($goodsID);
+        if (empty($goods)) {
+            AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_ORDER);
+        }
+
+        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+            require_once dirname(__DIR__) . '\smzf-php-demo\erweima.php';
+        }else{
+            require_once dirname(__DIR__) . '/php/erweima.php';
+        }
+
+        //生成订单号
+        $order_sn = $this->makeOrderID($userID);
+        $pay_amount = $goods['consumeNum'] / 100;  //支付金额元
+        $desc = '-支付宝扫码支付个人';
+        $requestId = $this->getrequestId();
+        $goods['requestId'] = $requestId;
+        $result = $this->createOrder($goods, $userID, $order_sn, $desc);
+        if (empty($result)) {
+            AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_ORDER);
+        }
+        $merconfig = aliPaySmzfpertoinConfig::MERCONFIG;
+        $imgopj = new \TradeClient($merconfig);
+
+
+        //$array = ['deviceType' => $deviceType, 'payWay' => EnumConfig::E_PayWay['WIN_XIN']];
+        $pay_result = $imgopj->doPayment($requestId, $order_sn, $pay_amount);
         return $pay_result;
     }
 
@@ -395,5 +533,17 @@ class PayAction extends AppAction
         }
         $pay_result = HuiFuBaoPay::getInstance()->doPayment($goods, $userID);
         return $pay_result;
+    }
+
+    /**
+     * 获取请求ID
+     * @return string
+     */
+    protected function getrequestId()
+    {
+        list($s1, $s2)	=	explode(' ', microtime());
+        list($ling, $haomiao)=	explode('.', $s1);
+        $haomiao    =	substr($haomiao,0,3);
+        return date("YmdHis",$s2).$haomiao; //商户订单号(out_trade_no).必填(建议是英文字母和数字,不能含有特殊字符)
     }
 }

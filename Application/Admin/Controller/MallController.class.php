@@ -9,6 +9,7 @@ use model\AgentModel;
 use model\UserModel;
 use helper\FunctionHelper;
 use pay\hui_tong\QryOneOrd;
+use action\PayAction;
 
 class MallController extends AdminController
 {
@@ -691,6 +692,36 @@ class MallController extends AdminController
 
 
 
+    }
+
+    /**
+     * 新接支付宝扫码支付订单交易查询  收款账户为个人
+     * @DateTime 2017-12-08
+     */
+    public function smzfGetOrderinfo()
+    {
+        $showorderinfo = [];
+        if (!empty(I('search'))) {
+            //根据订单号查询出请求订单id
+            $orderinfo = M()->table(MysqlConfig::Table_web_pay_orders)->where(['order_sn' => trim(I('search'))])->field('order_sn,requestId')
+                //->fetchSql()
+                ->find();
+            //var_dump($orderinfo);exit;
+            if(empty($orderinfo)) $this->error('该订单不存在!');
+            if(empty($orderinfo['requestid'])) $this->error('不是该平台订单!');
+            $payClass = new PayAction();
+            //var_dump($orderinfo);
+            $showorderinfo = $payClass->show_aliPaySmzfpertoin_callback($orderinfo['requestid'], $orderinfo['order_sn']);
+            //if($showorderinfo['RspCod'] != 00000) $this->error($showorderinfo['RspMsg']);
+        }
+
+        echo 33;
+        var_dump($showorderinfo);exit;
+        /*$showorderinfo['TxTime'] = strtotime($showorderinfo['TxTime']);
+        $showorderinfo['Amount'] = $showorderinfo['Amount']/100;
+        $showorderinfo['PayFee'] = $showorderinfo['PayFee']/100;
+        $this->assign('_data', $showorderinfo);*/
+        $this->display();
     }
 
 }

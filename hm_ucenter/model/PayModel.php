@@ -162,6 +162,7 @@ class PayModel extends AppModel
             "status" => $status,
             "create_time" => $create_time,
             "pay_desc" => $desc,
+            "requestId" => $goods['requestId'],
         );
         //订单统计信息
         UserModel::getInstance()->addWebUserInfoValue($userID, 'makeOrderCount');
