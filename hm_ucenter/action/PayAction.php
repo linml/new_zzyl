@@ -165,7 +165,7 @@ class PayAction extends AppAction
         if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
             require_once dirname(__DIR__) . '\smzf-php-demo\erweima.php';
         }else{
-            require_once dirname(__DIR__) . '/php/erweima.php';
+            require_once dirname(__DIR__) . '/smzf-php-demo/erweima.php';
         }
 
         $merconfig = aliPaySmzfpertoinConfig::MERCONFIG;
@@ -372,7 +372,7 @@ class PayAction extends AppAction
         if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
             require_once dirname(__DIR__) . '\smzf-php-demo\erweima.php';
         }else{
-            require_once dirname(__DIR__) . '/php/erweima.php';
+            require_once dirname(__DIR__) . '/smzf-php-demo/erweima.php';
         }
 
         //生成订单号
