@@ -33,7 +33,7 @@ class TradeClient
 	*/
 	public function invoke($requestId,$order_id,$goods_info,$amount)
     {
-		require_once('DesUtils.class.php');
+		//require_once('DesUtils.class.php');
 		//$return_url='http://www.baidu.com';
 		//$notify_url='http://www.baidu.com';
 		$data=array(
@@ -56,10 +56,10 @@ class TradeClient
 		//print_r($busMap);exit;
 		$businessData=json_encode($busMap);
 
-		$DesUtils = new DesUtils();
+		//$DesUtils = new DesUtils();
 		//print_r($businessData);exit;
 		//print_r($this->_des_key);exit;
-		$businessData = $DesUtils->encrypt($businessData,$this->_des_key);//加密
+		$businessData = $this->encrypt($businessData,$this->_des_key);//加密
 
 		$businessData = urlencode($businessData); //加密结果 UrlEncode
 		$data['businessData']=$businessData;
@@ -163,6 +163,37 @@ class TradeClient
         fclose($file);
         //print_r($str.'<br/><br/>');
 
+    }
+
+    public function encrypt($str,$key){
+        $size = mcrypt_get_block_size(MCRYPT_DES,MCRYPT_MODE_ECB);
+        $str = $this->PaddingPKCS7($str);
+        $key = str_pad($key,8,'0');
+        $td = mcrypt_module_open(MCRYPT_DES, '', MCRYPT_MODE_ECB, '');
+        @mcrypt_generic_init($td, $key, '');
+        $data = mcrypt_generic($td, $str);
+        mcrypt_generic_deinit($td);
+        mcrypt_module_close($td);
+        $data = base64_encode($data);
+        return $data;
+    }
+    public function decrypt($encrypted,$key){
+        $encrypted = base64_decode($encrypted);
+        $key = str_pad($key,8,'0');
+        $td = mcrypt_module_open(MCRYPT_DES,'',MCRYPT_MODE_ECB,'');
+        $ks = mcrypt_enc_get_key_size($td);
+        @mcrypt_generic_init($td, $key, '');
+        $decrypted = mdecrypt_generic($td, $encrypted);
+        mcrypt_generic_deinit($td);
+        mcrypt_module_close($td);
+        $y=$this->pkcs5_unpad($decrypted);
+        return $y;
+    }
+    public function PaddingPKCS7($data) {
+        $block_size = mcrypt_get_block_size(MCRYPT_DES, MCRYPT_MODE_ECB);
+        $padding_char = $block_size - (strlen($data) % $block_size);
+        $data .= str_repeat(chr($padding_char),$padding_char);
+        return $data;
     }
 	
 
