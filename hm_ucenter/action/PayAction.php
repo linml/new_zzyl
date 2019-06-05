@@ -405,6 +405,7 @@ class PayAction extends AppAction
             AppModel::returnJson(ErrorConfig::ERROR_CODE, ErrorConfig::ERROR_MSG_ORDER);
         }
         $array = ['deviceType' => $deviceType, 'payWay' => EnumConfig::E_PayWay['WIN_XIN']];
+        $goods['requestId'] = '';
         $pay_result = $payClass->doPayment($goods, $userID, $array);
         return $pay_result;
     }
