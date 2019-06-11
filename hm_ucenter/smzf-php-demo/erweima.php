@@ -97,7 +97,7 @@ class TradeClient
         $this->payLog('-----------支付宝扫码支付个人对个人---------------请求参数' . json_encode($data));
 		$pageContents = $HttpClient->quickPost($posturl, $data);
         //$this->payLog('-----------支付宝扫码支付个人对个人---------------同步返回参数' . $pageContents);
-		//var_dump($pageContents);exit;
+		var_dump($pageContents);exit;
 		return $pageContents;
 	}
 	
