@@ -17,6 +17,7 @@ final class RedisConfig
         TODO  Hash（字典）
      */
     const Hash_emailDetailInfo = 'emailDetailInfo'; //邮件详细信息
+    const Hash_appSendMessage = 'appSendMessage'; //APP推送信息
     const Hash_userToEmailDetailInfo = 'userToEmailDetailInfo'; //玩家对应详细邮件信息
     const Hash_friendsGroup = 'friendsGroup'; //俱乐部信息
     const Hash_friendsGroupToUser = 'friendsGroupToUser'; //俱乐部的玩家信息

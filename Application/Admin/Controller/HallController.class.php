@@ -1815,5 +1815,65 @@ class HallController extends AdminController
         return $timeAreaList;
     }
 
+    //个推推送APP消息
+    public function sendAppMessage()
+    {
+        $res = RedisManager::getRedis()->hGetAll(RedisConfig::Hash_appSendMessage);
+        $emailList = [];
+        foreach ($res as $k => $v){
+            $emailList[$k] = json_decode($v, true);
+        }
+        //var_dump($emailList);
+        krsort($emailList);
+        //var_dump($emailList);exit;
+        $this->assign('emailList', $emailList);
+        $this->display();
+    }
+
+    //发布系统邮件
+    public function send_message()
+    {
+        if (IS_POST) {
+            $title = I('title');
+            $content = I('content');
+            if (empty($title) || empty($content)) {
+                $this->error('标题或者内容不能为空');
+            }
+
+            if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+                require_once dirname(__DIR__) . '\Common\getui\Tuisong.php';
+            }else{
+                require_once dirname(__DIR__) . '/Common/getui/Tuisong.php';
+            }
+
+            $Tuisong = new \Tuisong($title,$content);
+            $Tuisong->pushMessageToApp();
+
+            //将推送的消息存到redis
+            //邮件结构
+            $applDetailInfo = array(
+                'sendtime' => time(), // 发送时间
+                'senderID' => UID, // 发送者ID
+                'contentCount' => strlen($content), // 内容长度
+                'content' => $content, // 内容
+                'type' => 1, // 1群消息 2个人消息
+                'title' => $title, // 标题
+            );
+            //获取推送信息的条数
+            $len = RedisManager::getRedis()->hLen(RedisConfig::Hash_appSendMessage);
+            if(empty($len)){
+                $len = 1;
+            }else {
+                $len += 1;
+            }
+            // 增加APP推送信息
+            RedisManager::getRedis()->hSet(RedisConfig::Hash_appSendMessage, $len, json_encode($applDetailInfo));
+
+            $this->success('消息推送成功');
+        } else {
+            $this->display();
+        }
+    }
+
 
 }
