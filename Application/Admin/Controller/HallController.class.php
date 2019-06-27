@@ -1830,8 +1830,55 @@ class HallController extends AdminController
         $this->display();
     }
 
-    //发布系统邮件
+    //APP推送群消息
     public function send_message()
+    {
+        if (IS_POST) {
+            $title = I('title');
+            $content = I('content');
+            $clientidstr = I('clientidstr');
+            if (empty($title) || empty($content) || empty($clientidstr)) {
+                $this->error('标题或者内容后者客户ID不能为空');
+            }
+
+            if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+                require_once dirname(__DIR__) . '\Common\getui\Tolist.php';
+            }else{
+                require_once dirname(__DIR__) . '/Common/getui/Tolist.php';
+            }
+
+            $Tuisong = new \Tolist($title, $content, $clientidstr);
+            $Tuisong->pushMessageToList();
+
+            //将推送的消息存到redis
+            //邮件结构
+            $applDetailInfo = array(
+                'sendtime' => time(), // 发送时间
+                'senderID' => UID, // 发送者ID
+                'contentCount' => strlen($content), // 内容长度
+                'content' => $content, // 内容
+                'type' => 2, // 1群消息 2批量消息
+                'title' => $title, // 标题
+                'clientidstr' => $clientidstr, // 批量用户
+            );
+            //获取推送信息的条数
+            $len = RedisManager::getRedis()->hLen(RedisConfig::Hash_appSendMessage);
+            if(empty($len)){
+                $len = 1;
+            }else {
+                $len += 1;
+            }
+            // 增加APP推送信息
+            RedisManager::getRedis()->hSet(RedisConfig::Hash_appSendMessage, $len, json_encode($applDetailInfo));
+
+            $this->success('消息推送成功');
+        } else {
+            $this->display();
+        }
+    }
+
+    //APP推送批量消息
+    public function piliang_send_message()
     {
         if (IS_POST) {
             $title = I('title');

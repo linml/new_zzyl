@@ -16,8 +16,8 @@
                             <div class="col-sm-3" style="width:100px;margin-left:0px;">
                                 <div class="input-group">
                                     <a href="javascript:;" class="btn btn-sm btn-success"
-                                       onclick="admin_edit('发布个人消息','{:U('personal_send_email')}','2','500','580')"
-                                       style="text-decoration:none"> 推送个人消息</a>
+                                       onclick="admin_edit('推送批量消息','{:U('piliang_send_message')}','2','500','580')"
+                                       style="text-decoration:none"> 批量推送消息</a>
                                 </div>
                             </div>
                             </form>
@@ -38,7 +38,7 @@
                                         <td>{$email.title}</td>
                                         <td>{$email.content}</td>
                                         <td><if condition="$email['type'] eq 1">群消息
-                                            <else /> 个人消息
+                                            <else />批量消息
                                         </if></td>
 
                                         <td>{$email.sendtime|date="Y-m-d H:i:s",###}</td>
