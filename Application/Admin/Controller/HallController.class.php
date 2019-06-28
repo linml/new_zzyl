@@ -1836,19 +1836,18 @@ class HallController extends AdminController
         if (IS_POST) {
             $title = I('title');
             $content = I('content');
-            $clientidstr = I('clientidstr');
-            if (empty($title) || empty($content) || empty($clientidstr)) {
-                $this->error('标题或者内容后者客户ID不能为空');
+            if (empty($title) || empty($content)) {
+                $this->error('标题或者内容不能为空');
             }
 
             if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-                require_once dirname(__DIR__) . '\Common\getui\Tolist.php';
+                require_once dirname(__DIR__) . '\Common\getui\Tuisong.php';
             }else{
-                require_once dirname(__DIR__) . '/Common/getui/Tolist.php';
+                require_once dirname(__DIR__) . '/Common/getui/Tuisong.php';
             }
 
-            $Tuisong = new \Tolist($title, $content, $clientidstr);
-            $Tuisong->pushMessageToList();
+            $Tuisong = new \Tuisong($title,$content);
+            $Tuisong->pushMessageToApp();
 
             //将推送的消息存到redis
             //邮件结构
@@ -1857,9 +1856,8 @@ class HallController extends AdminController
                 'senderID' => UID, // 发送者ID
                 'contentCount' => strlen($content), // 内容长度
                 'content' => $content, // 内容
-                'type' => 2, // 1群消息 2批量消息
+                'type' => 1, // 1群消息 2个人消息
                 'title' => $title, // 标题
-                'clientidstr' => $clientidstr, // 批量用户
             );
             //获取推送信息的条数
             $len = RedisManager::getRedis()->hLen(RedisConfig::Hash_appSendMessage);
@@ -1883,18 +1881,20 @@ class HallController extends AdminController
         if (IS_POST) {
             $title = I('title');
             $content = I('content');
-            if (empty($title) || empty($content)) {
-                $this->error('标题或者内容不能为空');
+            $clientidstr = I('clientidstr');
+            if (empty($title) || empty($content) || empty($clientidstr)) {
+                $this->error('标题或者内容后者客户ID不能为空');
             }
 
             if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-                require_once dirname(__DIR__) . '\Common\getui\Tuisong.php';
+                require_once dirname(__DIR__) . '\Common\getui\Tolist.php';
             }else{
-                require_once dirname(__DIR__) . '/Common/getui/Tuisong.php';
+                require_once dirname(__DIR__) . '/Common/getui/Tolist.php';
             }
 
-            $Tuisong = new \Tuisong($title,$content);
-            $Tuisong->pushMessageToApp();
+            $Tuisong = new \Tolist($title, $content, $clientidstr);
+            $res = $Tuisong->pushMessageToList();
+            var_dump($res);exit;
 
             //将推送的消息存到redis
             //邮件结构
@@ -1903,8 +1903,9 @@ class HallController extends AdminController
                 'senderID' => UID, // 发送者ID
                 'contentCount' => strlen($content), // 内容长度
                 'content' => $content, // 内容
-                'type' => 1, // 1群消息 2个人消息
+                'type' => 2, // 1群消息 2批量消息
                 'title' => $title, // 标题
+                'clientidstr' => $clientidstr, // 批量用户
             );
             //获取推送信息的条数
             $len = RedisManager::getRedis()->hLen(RedisConfig::Hash_appSendMessage);
