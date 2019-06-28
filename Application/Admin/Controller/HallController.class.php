@@ -1894,7 +1894,7 @@ class HallController extends AdminController
 
             $Tuisong = new \Tolist($title, $content, $clientidstr);
             $res = $Tuisong->pushMessageToList();
-            var_dump($res);exit;
+            //var_dump($res);exit;
 
             //将推送的消息存到redis
             //邮件结构
