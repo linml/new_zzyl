@@ -36,6 +36,8 @@ class HallController extends AdminController
     }*/
 
     public $moneyMapField = [3, 14, 19, 21, 23, 29];
+    const APPKEY = '9503595df05a404bcc7d03d9';
+    const MASTERSECRET = 'a548ad4487efc2b252e195a6';
     //抽奖管理
     public function turntable()
     {
@@ -1852,9 +1854,9 @@ class HallController extends AdminController
 
             $Tuisong = new \Tuisong($title,$content);
             $Tuisong->pushMessageToApp();*/
-            $app_key = '9503595df05a404bcc7d03d9';
-            $master_secret = 'a548ad4487efc2b252e195a6';
-            $client = new JPush($app_key, $master_secret);
+            /*$app_key = '9503595df05a404bcc7d03d9';
+            $master_secret = 'a548ad4487efc2b252e195a6';*/
+            $client = new JPush(self::APPKEY, self::MASTERSECRET);
             //var_dump($client);exit;
             $pusher = $client->push();
             $pusher->setPlatform('all');
@@ -1876,7 +1878,7 @@ class HallController extends AdminController
                 'contentCount' => strlen($content), // 内容长度
                 'content' => $content, // 内容
                 'type' => 1, // 1群消息 2个人消息
-                'title' => $title, // 标题
+                //'title' => $title, // 标题
             );
             //获取推送信息的条数
             $len = RedisManager::getRedis()->hLen(RedisConfig::Hash_appSendMessage);
