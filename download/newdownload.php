@@ -158,7 +158,7 @@ if (!defined('zzyl')) {
          src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
          data-src=images/download/18.png
          onload=lzld(this) />
-    <div id="downloadButton" class="download_btn bottom">
+    <div id="newdownloadButton" class="download_btn bottom">
 <span>
 	<img style="width:100%;"
          src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
@@ -195,10 +195,18 @@ if (!defined('zzyl')) {
             var m = this, button = document.getElementById("downloadButton");
             button.style.visibility = "visible";
 
+            newbutton = document.getElementById("newdownloadButton");
+            newbutton.style.visibility = "visible";
+
             /*在app已安装的情况尝试拉起app*/
             m.schemeWakeup();
             /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
             button.onclick = function() {
+                m.wakeupOrInstall();
+                return false;
+            }
+            /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
+            newbutton.onclick = function() {
                 m.wakeupOrInstall();
                 return false;
             }
