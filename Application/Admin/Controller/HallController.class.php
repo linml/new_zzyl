@@ -1,5 +1,8 @@
 <?php
 namespace Admin\Controller;
+include './vendor/autoload.php';
+
+use JPush\Client as JPush;
 use config\EnumConfig;
 use config\ErrorConfig;
 use config\GeneralConfig;
@@ -1834,20 +1837,36 @@ class HallController extends AdminController
     public function send_message()
     {
         if (IS_POST) {
-            $title = I('title');
+            //$title = I('title');
             $content = I('content');
-            if (empty($title) || empty($content)) {
+            //if (empty($title) || empty($content)) {
+            if (empty($content)) {
                 $this->error('标题或者内容不能为空');
             }
 
-            if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+            /*if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
                 require_once dirname(__DIR__) . '\Common\getui\Tuisong.php';
             }else{
                 require_once dirname(__DIR__) . '/Common/getui/Tuisong.php';
             }
 
             $Tuisong = new \Tuisong($title,$content);
-            $Tuisong->pushMessageToApp();
+            $Tuisong->pushMessageToApp();*/
+            $app_key = '9503595df05a404bcc7d03d9';
+            $master_secret = 'a548ad4487efc2b252e195a6';
+            $client = new JPush($app_key, $master_secret);
+            //var_dump($client);exit;
+            $pusher = $client->push();
+            $pusher->setPlatform('all');
+            $pusher->addAllAudience();
+            $pusher->setNotificationAlert($content);
+            try {
+                $res = $pusher->send();
+                //var_dump($res);exit;
+            } catch (\JPush\Exceptions\JPushException $e) {
+                // try something else here
+                $this->error('推送失败!失败原因'.$e->getMessage());
+            }
 
             //将推送的消息存到redis
             //邮件结构
