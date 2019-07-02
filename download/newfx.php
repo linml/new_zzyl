@@ -13,7 +13,7 @@ header("Pragma: no-cache");
 //设置默认时区
 date_default_timezone_set('Asia/Shanghai');
 
-//自动加载帮助类
+//自动加载帮助类//
 require_once dirname(__DIR__) . '/hm_ucenter/helper/LoadHelper.php';
 
 $gameConfig = ShareModel::getInstance()->getGameConfig();
