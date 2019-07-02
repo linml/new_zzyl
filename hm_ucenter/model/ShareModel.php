@@ -68,9 +68,9 @@ class ShareModel extends AppModel
         return DBManager::getMysql()->insert(MysqlConfig::Table_web_share_record, $arrayData);
     }
 
-    public function getShareCode($unionID)
+    public function getShareCode($userid)
     {
-        $where = "unionid = '{$unionID}'";
+        $where = "userid = '{$userid}'";
         return DBManager::getMysql()->selectRow(MysqlConfig::Table_web_share_code, [], $where);
     }
 
@@ -79,9 +79,9 @@ class ShareModel extends AppModel
         return DBManager::getMysql()->insert(MysqlConfig::Table_web_share_code, $arrayData);
     }
 
-    public function updateShareCode($unionID, $arrayData)
+    public function updateShareCode($userID, $arrayData)
     {
-        $where = "unionid = '{$unionID}'";
+        $where = "userid = '{$userID}'";
         return DBManager::getMysql()->update(MysqlConfig::Table_web_share_code, $arrayData, $where);
     }
 

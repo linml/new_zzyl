@@ -95,6 +95,79 @@ class UserAction extends AppAction
         AppModel::returnJson(ErrorConfig::SUCCESS_CODE, ErrorConfig::SUCCESS_MSG_DEFAULT);
     }
 
+    /*
+     * 模拟微信授权异步操作
+     * @param int $invite_userid  分享者ID
+     * @param int $userID  登陆的用户ID
+     * return  ''
+     *
+     * */
+    public function callback($invite_userid = '', $userID = '')
+    {
+        $time = date('YmdHis');
+        LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
+        $data['unionid']      = '';
+        $data['invite_userid'] = $invite_userid;
+        $data['userid']      = $userID;
+        $data['status'] = EnumConfig::E_ShareCodeRewardStatus['NONE'];
+        $data['time'] = time();
+
+        // 邀请人用户id 是否存在（是否存在邀请人）
+        $arrayKeyValue = ['userID'];
+        $where = "userID = {$invite_userid}";
+        $invite_user = DBManager::getMysql()->selectRow(MysqlConfig::Table_userinfo, $arrayKeyValue, $where);
+        //$invite_user = M()->table('userInfo')->where(['userID' => $invite_userid])->find();;
+        if (!$invite_user) {
+            return '';
+        }
+        // 代理id
+        //$isagentid = M('agentMember')->where(['userid' => $invite_userid])->find();
+        $arrayKeyValue2 = ['new_agent_leval_money'];
+        $where2 = "userid = {$invite_userid}";
+        $isagentid = DBManager::getMysql()->selectRow(MysqlConfig::Table_web_agent_member, $arrayKeyValue2, $where2);
+        //邀请人是代理
+        LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
+        // 是否存在数据
+        //$dataExists = M('share_code')->where(['userid' => $userID])->find();
+        $arrayKeyValue3 = ['status','userid','id'];
+        $where3 = "userid = {$userID}";
+        $dataExists = DBManager::getMysql()->selectRow(MysqlConfig::Table_web_share_code, $arrayKeyValue3, $where3);
+
+        if (!$dataExists) {
+            //不存在被邀请人的分享记录数据
+            LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
+            //M('share_code')->add($data);
+            DBManager::getMysql()->insert(MysqlConfig::Table_web_share_code, $data);
+            return '';
+        } else {
+            LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
+            if (EnumConfig::E_ShareCodeRewardStatus['SEND'] == $dataExists['status']) {
+                LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
+                // 绑定过
+                return '';
+            } elseif (EnumConfig::E_ShareCodeRewardStatus['NONE'] == $dataExists['status'] || EnumConfig::E_ShareCodeRewardStatus['NOT'] == $dataExists['status']) {
+                LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
+                // 更新 只有当分享的人不是自己的时候才执行更新操作 并且分享的人的保底金额要大于当前下载的人的保底金额
+                //查询出当前下载用户的保底金额
+                //$current_userinfo = M('agentMember')->where(['userid' => $dataExists['userid']])->find();
+                $exuserID = $dataExists['userid'];
+                $arrayKeyValue4 = ['new_agent_leval_money'];
+                $where4 = "userid = {$exuserID}";
+                $current_userinfo = DBManager::getMysql()->selectRow(MysqlConfig::Table_web_agent_member, $arrayKeyValue4, $where4);
+                if($dataExists['userid'] != $invite_userid && $isagentid['new_agent_leval_money'] > $current_userinfo['new_agent_leval_money']){
+                    //M('share_code')->where(['id' => $dataExists['id']])->save($data);
+                    $gameplayerid = $dataExists['id'];
+                    DBManager::getMysql()->update(MysqlConfig::Table_web_share_code, $data, "id = {$gameplayerid}");
+                }
+                return '';
+            }
+
+        }
+
+
+        return '';
+    }
+
     /**
      * 微信用户登录
      * @param $params
@@ -102,17 +175,21 @@ class UserAction extends AppAction
     public function WXUserLogin($params)
     {
         $userID = (int)$params['userID']; // 122005
-        $unionID = $params['unionID']; // 微信用户唯一ID // 2344
-        $time = date('YmdHis');
+        //$unionID = $params['unionID']; // 微信用户唯一ID // 2344
+        $inviteUserid = $params['inviteuserid']; //分享者的用户ID
+        /*var_dump($userID);
+        var_dump($inviteUserid);exit;*/
+        if(!empty($inviteUserid)) $this->callback($inviteUserid, $userID);
 
-        $shareCode = ShareModel::getInstance()->getShareCode($unionID);
+        $time = date('YmdHis');
+        $shareCode = ShareModel::getInstance()->getShareCode($userID);
 
         if (empty($shareCode)) {
             //不存在被邀请的记录 增加用户id和微信id的关系
             $shareCode = array(
                 "userid" => $userID,
-                "unionid" => $unionID,
-                "invite_userid" => 0,
+                "unionid" => '',
+                "invite_userid" => $inviteUserid,
                 "status" => EnumConfig::E_ShareCodeRewardStatus['NOT'],
                 "time" => time(),
             );
@@ -130,7 +207,7 @@ class UserAction extends AppAction
                 $shareCode['status'] = EnumConfig::E_ShareCodeRewardStatus['NONE'];
             }
             LogHelper::printDebug($time . 'wechat_debug' . __LINE__);
-            ShareModel::getInstance()->updateShareCode($unionID, $shareCode);
+            ShareModel::getInstance()->updateShareCode($userID, $shareCode);
         }
         //发送奖励
 //        var_dump($shareCode['status']);
@@ -145,7 +222,7 @@ class UserAction extends AppAction
             //获取代理信息
             $agentMember = AgentModel::getInstance()->getAgentMemberByUserID($shareCode['invite_userid']);
             $shareCode['status'] = EnumConfig::E_ShareCodeRewardStatus['SEND'];
-            ShareModel::getInstance()->updateShareCode($unionID, $shareCode);
+            ShareModel::getInstance()->updateShareCode($userID, $shareCode);
 
 //            var_dump($agentMember);
             if (empty($agentMember)) {
