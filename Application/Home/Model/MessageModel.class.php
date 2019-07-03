@@ -368,7 +368,7 @@ class MessageModel extends Model
     // 发送末模板消息
     public function tplMessage($type, $openid, $user)
     {
-        $url = 'http://ht.szhuomei.com/download/oldfx.php';
+        $url = 'http://ht.szhuomei.com/download/fx.php';
         switch ($type) {
             case 0: // 提交提醒
                 $templateId = 'v4T53dCnm7nlHsQqzzK_MlLwZz5umopb3zQI6pp7J1Q';
