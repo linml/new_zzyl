@@ -118,7 +118,7 @@ class   PromotionAction extends AppAction
 
         if(empty($userinfo['phone'])) AppModel::returnJson(ErrorConfig::ERROR_CODE, '请先绑定手机号');
 
-        $url = $access_domain.'/home/wechat/share.html?userID='.$id;
+        $url = $access_domain.'/download/fx.php?userID='.$id;
         $img = '';
 
         $value = $url;  //二维码内容;
@@ -211,7 +211,7 @@ class   PromotionAction extends AppAction
         }
         $returnarr['qrimg'] = $qrimg;
         $returnarr['extension'] = $extension;
-        $longUrl = $access_domain.'/home/wechat/share.html?userID='.$id;
+        $longUrl = $access_domain.'/download/fx.php?userID='.$id;
         $returnarr['short_links'] = self::shortUrl($longUrl);
 
         AppModel::returnJson(ErrorConfig::SUCCESS_CODE, ErrorConfig::SUCCESS_MSG_DEFAULT, $returnarr);

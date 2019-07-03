@@ -13,7 +13,7 @@ header("Pragma: no-cache");
 //设置默认时区
 date_default_timezone_set('Asia/Shanghai');
 
-//自动加载帮助类
+//自动加载帮助类//
 require_once dirname(__DIR__) . '/hm_ucenter/helper/LoadHelper.php';
 
 $gameConfig = ShareModel::getInstance()->getGameConfig();
@@ -23,7 +23,7 @@ include 'download.php';
 exit;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -178,7 +178,7 @@ exit;
     //    $('#body').on('click',function(){
     //    if($('#weixintishi').css('display') == 'block'){
     //   $('#weixintishi').css('display','none');
-    //  }      
+    //  }
     //  });
 
 

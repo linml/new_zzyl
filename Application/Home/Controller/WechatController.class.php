@@ -209,7 +209,7 @@ class WechatController extends Controller
         // $user = M('share_code')->where(['unionid' => $data['unionid']])->find();
         // // 自己邀请自己
         // if ($user['userid'] == $invite_userid) {
-        //     header('location:http://' . $this->domain . '/download/fx.php');
+        //     header('location:http://' . $this->domain . '/download/oldfx.php');
         // }
 
         // 邀请人用户id 是否存在（是否存在邀请人）
@@ -218,7 +218,7 @@ class WechatController extends Controller
         if (!$invite_user) {
             //不存在邀请人
             LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
-            header('location:http://' . $this->domain . '/download/fx.php');
+            header('location:http://' . $this->domain . '/download/oldfx.php');
             exit;
         }
 
@@ -235,14 +235,14 @@ class WechatController extends Controller
                 //不存在被邀请人的分享记录数据
                 LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
                 M('share_code')->add($data);
-                header('location:http://' . $this->domain . '/download/fx.php');
+                header('location:http://' . $this->domain . '/download/oldfx.php');
                 exit;
             } else {
                 LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
                 if (EnumConfig::E_ShareCodeRewardStatus['SEND'] == $dataExists['status']) {
                     LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
                     // 绑定过
-                    header('location:http://' . $this->domain . '/download/fx.php');
+                    header('location:http://' . $this->domain . '/download/oldfx.php');
                     exit;
                 } elseif (EnumConfig::E_ShareCodeRewardStatus['NONE'] == $dataExists['status'] || EnumConfig::E_ShareCodeRewardStatus['NOT'] == $dataExists['status']) {
                     LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
@@ -252,7 +252,7 @@ class WechatController extends Controller
                     if($dataExists['userid'] != $invite_userid && $isagentid['new_agent_leval_money'] > $current_userinfo['new_agent_leval_money']){
                         M('share_code')->where(['id' => $dataExists['id']])->save($data);
                     }
-                    header('location:http://' . $this->domain . '/download/fx.php');
+                    header('location:http://' . $this->domain . '/download/oldfx.php');
                     exit;
                 }
 
@@ -265,7 +265,7 @@ class WechatController extends Controller
             // 判断是否新用户
             if ($user) {
                 LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
-                header('location:http://' . $this->domain . '/download/fx.php');
+                header('location:http://' . $this->domain . '/download/oldfx.php');
                 exit;
             }
 
@@ -278,11 +278,11 @@ class WechatController extends Controller
                 LogHelper::printDebug($time . 'agentBangDebug' . __LINE__);
                 M('share_code')->add($data);
             }
-            header('location:http://' . $this->domain . '/download/fx.php');
+            header('location:http://' . $this->domain . '/download/oldfx.php');
             exit;
         }
 
-        header('location:http://' . $this->domain . '/download/fx.php');
+        header('location:http://' . $this->domain . '/download/oldfx.php');
         exit;
     }
 

@@ -293,7 +293,7 @@ class WelfareAction extends AppAction
         };
 
         $data = [
-            'shareUrl' => 'http://zzyl.szbchm.com/download/fx.php',//分享链接
+            'shareUrl' => 'http://zzyl.szbchm.com/download/oldfx.php',//分享链接
             'contactQrcode' => $contactQrcode,//客服二维码
             'agentUserID' => empty($agentUserID['userid']) ? '' : $agentUserID['userid'],//上级代理
             'sysNotice' => empty($notice) ? [] : $notice[0],//系统公告
