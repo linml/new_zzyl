@@ -222,7 +222,8 @@ if (!defined('zzyl')) {
             var u = navigator.userAgent;
             var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 || u.indexOf('android') > -1; //android终端
             if (isAndroid) {
-                location.href = "<?php echo $gameConfig['android_packet_address'] ? $gameConfig['android_packet_address'] : 'anzhuo.apk';?>"
+                //location.href = "<?php echo $gameConfig['android_packet_address'] ? $gameConfig['android_packet_address'] : 'anzhuo.apk';?>"
+                location.href = "http://testzgs.szbchm.com/zzyltest.apk";
             } else {
                 var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
                 if (isiOS) {
