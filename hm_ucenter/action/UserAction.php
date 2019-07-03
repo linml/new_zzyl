@@ -179,6 +179,7 @@ class UserAction extends AppAction
         $inviteUserid = $params['inviteuserid']; //分享者的用户ID
         /*var_dump($userID);
         var_dump($inviteUserid);exit;*/
+        LogHelper::printLog('SHARE_INSTALL','用户ID=》'.$userID.' 分享人的ID=>'.$inviteUserid);
         if(!empty($inviteUserid)) $this->callback($inviteUserid, $userID);
 
         $time = date('YmdHis');
