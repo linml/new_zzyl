@@ -177,13 +177,12 @@ class UserAction extends AppAction
         $userID = (int)$params['userID']; // 122005
         //$unionID = $params['unionID']; // 微信用户唯一ID // 2344
         $inviteUserid = $params['inviteuserid']; //分享者的用户ID
-        if ($userID == $inviteUserid) {
-            $inviteUserid = '';
-        }
+        LogHelper::printLog('SHARE_INSTALL','用户ID=》'.$userID.' 分享人的ID=>'.$inviteUserid);
+        if ($userID == $inviteUserid) $inviteUserid = '';
+        $this->callback($inviteUserid, $userID);
         /*var_dump($userID);
         var_dump($inviteUserid);exit;*/
-        LogHelper::printLog('SHARE_INSTALL','用户ID=》'.$userID.' 分享人的ID=>'.$inviteUserid);
-        if(!empty($inviteUserid)) $this->callback($inviteUserid, $userID);
+        //if(!empty($inviteUserid)) $this->callback($inviteUserid, $userID);
 
         $time = date('YmdHis');
         $shareCode = ShareModel::getInstance()->getShareCode($userID);
