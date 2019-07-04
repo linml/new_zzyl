@@ -66,56 +66,56 @@ function agentlevel($l){
 
 function get_select_str1($name){
     return "<select name='{$name}'>
-<option value='-1000' selected='selected'>负1档(-1000)</option>
-<option value='-900'>负2档(-900)</option>
-<option value='-700'>负3档(-700)</option>
-<option value='-500'>负4档(-500)</option>
-<option value='-200'>负5档(-200)</option>
-<option value='0'>0档(0)</option>
+<option value='0'>0档</option>
+<option value='-200'>负1档</option>
+<option value='-500'>负2档</option>
+<option value='-700'>负3档</option>
+<option value='-900'>负4档</option>
+<option value='-1000' selected='selected'>负5档</option>
 </select>";
 }
 
 function get_select_str2($name){
     return "<select name='{$name}'>
-<option value='-1000'>负1档(-1000)</option>
-<option value='-900' selected='selected'>负2档(-900)</option>
-<option value='-700'>负3档(-700)</option>
-<option value='-500'>负4档(-500)</option>
-<option value='-200'>负5档(-200)</option>
-<option value='0'>0档(0)</option>
+<option value='0'>0档</option>
+<option value='-200'>负1档</option>
+<option value='-500'>负2档</option>
+<option value='-700'>负3档</option>
+<option value='-900' selected='selected'>负4档</option>
+<option value='-1000'>负5档</option>
 </select>";
 }
 
 function get_select_str3($name){
     return "<select name='{$name}'>
-<option value='-1000>负1档(-1000)</option>
-<option value='-900'>负2档(-900)</option>
-<option value='-700'' selected='selected'>负3档(-700)</option>
-<option value='-500'>负4档(-500)</option>
-<option value='-200'>负5档(-200)</option>
-<option value='0'>0档(0)</option>
+<option value='0'>0档</option>
+<option value='-200'>负1档</option>
+<option value='-500'>负2档</option>
+<option value='-700' selected='selected'>负3档</option>
+<option value='-900'>负4档</option>
+<option value='-1000'>负5档</option>
 </select>";
 }
 
 function get_select_str4($name){
     return "<select name='{$name}'>
-<option value='-1000'>负1档(-1000)</option>
-<option value='-900'>负2档(-900)</option>
-<option value='-700'>负3档(-700)</option>
-<option value='-500' selected='selected'>负4档(-500)</option>
-<option value='-200'>负5档(-200)</option>
-<option value='0'>0档(0)</option>
+<option value='0'>0档</option>
+<option value='-200'>负1档</option>
+<option value='-500' selected='selected'>负2档</option>
+<option value='-700'>负3档</option>
+<option value='-900'>负4档</option>
+<option value='-1000'>负5档</option>
 </select>";
 }
 
 function get_select_str5($name){
     return "<select name='{$name}'>
-<option value='-1000'>负1档(-1000)</option>
-<option value='-900'>负2档(-900)</option>
-<option value='-700'>负3档(-700)</option>
-<option value='-500'>负4档(-500)</option>
-<option value='-200' selected='selected'>负5档(-200)</option>
-<option value='0'>0档(0)</option>
+<option value='0'>0档</option>
+<option value='-200' selected='selected'>负1档</option>
+<option value='-500'>负2档</option>
+<option value='-700'>负3档</option>
+<option value='-900'>负4档</option>
+<option value='-1000'>负5档</option>
 </select>";
 }
 
@@ -123,109 +123,179 @@ function get_select_str5($name){
 function get_select_str6($name, $type){
 	if ($type == 2) {
         return "<select name='{$name}'>
-<option value='-1000'>负1档(-1000)</option>
-<option value='-900'>负2档(-900)</option>
-<option value='-700'>负3档(-700)</option>
-<option value='-500'>负4档(-500)</option>
-<option value='-200'>负5档(-200)</option>
-<option value='0'  selected='selected'>0档(0)</option>
-<option value='200'>正5档(200)</option>
-<option value='500'>正4档(500)</option>
-<option value='700'>正3档(700)</option>
-<option value='900'>正2档(900)</option>
-<option value='1000'>正1档(1000)</option>
+<option value='-1000'>负5档</option>
+<option value='-900'>负4档</option>
+<option value='-700'>负3档</option>
+<option value='-500'>负4档</option>
+<option value='-200'>负1档</option>
+<option value='0'  selected='selected'>0档</option>
+<option value='200'>正1档</option>
+<option value='500'>正2档</option>
+<option value='700'>正3档</option>
+<option value='900'>正4档</option>
+<option value='1000'>正5档</option>
 </select>";
 	} else {
         return "<select name='{$name}'>
-<option value='0'  selected='selected'>0档(0)</option>
-<option value='200'>正5档(200)</option>
-<option value='500'>正4档(500)</option>
-<option value='700'>正3档(700)</option>
-<option value='900'>正2档(900)</option>
-<option value='1000'>正1档(1000)</option>
+<option value='0'  selected='selected'>0档</option>
+<option value='200'>1档</option>
+<option value='500'>2档</option>
+<option value='700'>3档</option>
+<option value='900'>4档</option>
+<option value='1000'>5档</option>
 </select>";
 	}
 
 }
 
-function get_select_str7($name){
-    return "<select name='{$name}'>
-<option value='0'>0档(0)</option>
-<option value='200' selected='selected'>正5档(200)</option>
-<option value='500'>正4档(500)</option>
-<option value='700'>正3档(700)</option>
-<option value='900'>正2档(900)</option>
-<option value='1000'>正1档(1000)</option>
+function get_select_str7($name, $type = 2){
+	if ($type == 2) {
+        return "<select name='{$name}'>
+<option value='0'>0档</option>
+<option value='200' selected='selected'>正1档</option>
+<option value='500'>正2档</option>
+<option value='700'>正3档</option>
+<option value='900'>正4档</option>
+<option value='1000'>正5档</option>
 </select>";
+	} else {
+        return "<select name='{$name}'>
+<option value='0'>0档</option>
+<option value='200' selected='selected'>1档</option>
+<option value='500'>2档</option>
+<option value='700'>3档</option>
+<option value='900'>4档</option>
+<option value='1000'>5档</option>
+</select>";
+	}
+
 }
 
-function get_select_str8($name){
-    return "<select name='{$name}'>
-<option value='0'>0档(0)</option>
-<option value='200'>正5档(200)</option>
-<option value='500' selected='selected'>正4档(500)</option>
-<option value='700'>正3档(700)</option>
-<option value='900'>正2档(900)</option>
-<option value='1000'>正1档(1000)</option>
-</select>";
+function get_select_str8($name, $type = 2){
+	if ($type == 2) {
+		return "<select name='{$name}'>
+	<option value='0'>0档</option>
+	<option value='200'>正1档</option>
+	<option value='500' selected='selected'>正2档</option>
+	<option value='700'>正3档</option>
+	<option value='900'>正4档</option>
+	<option value='1000'>正5档</option>
+	</select>";
+	}else {
+		return "<select name='{$name}'>
+	<option value='0'>0档</option>
+	<option value='200'>1档</option>
+	<option value='500' selected='selected'>2档</option>
+	<option value='700'>3档</option>
+	<option value='900'>4档</option>
+	<option value='1000'>5档</option>
+	</select>";
+	}
+
 }
 
-function get_select_str9($name){
-    return "<select name='{$name}'>
-<option value='0'>0档(0)</option>
-<option value='200'>正5档(200)</option>
-<option value='500'>正4档(500)</option>
-<option value='700' selected='selected'>正3档(700)</option>
-<option value='900'>正2档(900)</option>
-<option value='1000'>正1档(1000)</option>
-</select>";
+function get_select_str9($name, $type = 2){
+    if ($type == 2) {
+        return "<select name='{$name}'>
+	<option value='0'>0档</option>
+	<option value='200'>正1档</option>
+	<option value='500'>正2档</option>
+	<option value='700' selected='selected'>正3档</option>
+	<option value='900'>正4档</option>
+	<option value='1000'>正5档</option>
+	</select>";
+    }else {
+        return "<select name='{$name}'>
+	<option value='0'>0档</option>
+	<option value='200'>1档</option>
+	<option value='500'>2档</option>
+	<option value='700' selected='selected'>3档</option>
+	<option value='900'>4档</option>
+	<option value='1000'>5档</option>
+	</select>";
+    }
 }
 
-function get_select_str10($name){
-    return "<select name='{$name}'>
-<option value='0'>0档(0)</option>
-<option value='200'>正5档(200)</option>
-<option value='500'>正4档(500)</option>
-<option value='700'>正3档(700)</option>
-<option value='900' selected='selected'>正2档(900)</option>
-<option value='1000'>正1档(1000)</option>
-</select>";
+function get_select_str10($name, $type = 2){
+    if ($type == 2) {
+        return "<select name='{$name}'>
+	<option value='0'>0档</option>
+	<option value='200'>正1档</option>
+	<option value='500'>正2档</option>
+	<option value='700'>正3档</option>
+	<option value='900' selected='selected'>正4档</option>
+	<option value='1000'>正5档</option>
+	</select>";
+    }else {
+        return "<select name='{$name}'>
+	<option value='0'>0档</option>
+	<option value='200'>1档</option>
+	<option value='500'>2档</option>
+	<option value='700'>3档</option>
+	<option value='900' selected='selected'>4档</option>
+	<option value='1000'>5档</option>
+	</select>";
+    }
 }
 
-function get_select_str11($name){
-    return "<select name='{$name}'>
-<option value='0'>0档(0)</option>
-<option value='200'>正5档(200)</option>
-<option value='500'>正4档(500)</option>
-<option value='700'>正3档(700)</option>
-<option value='900'>正2档(900)</option>
-<option value='1000' selected='selected'>正1档(1000)</option>
-</select>";
+function get_select_str11($name, $type = 2){
+    if ($type == 2) {
+        return "<select name='{$name}'>
+	<option value='0'>0档</option>
+	<option value='200'>正1档</option>
+	<option value='500'>正2档</option>
+	<option value='700'>正3档</option>
+	<option value='900'>正4档</option>
+	<option value='1000' selected='selected'>正5档</option>
+	</select>";
+    }else {
+        return "<select name='{$name}'>
+	<option value='0'>0档</option>
+	<option value='200'>1档</option>
+	<option value='500'>2档</option>
+	<option value='700'>3档</option>
+	<option value='900'>4档</option>
+	<option value='1000' selected='selected'>5档</option>
+	</select>";
+    }
 }
 
 //default  没有比对上
-function get_select_str12($name, $value){
-	if ($value < 0) {
-        return "<select name='{$name}'>
-<option value='-1000'>请选择档位</option>
-<option value='-1000'>负1档(-1000)</option>
-<option value='-900'>负2档(-900)</option>
-<option value='-700'>负3档(-700)</option>
-<option value='-500'>负4档(-500)</option>
-<option value='-200'>负5档(-200)</option>
-<option value='0'>0档(0)</option>
+function get_select_str12($name, $value, $type = 2){
+	if ($type == 2) {
+        if ($value < 0) {
+            return "<select name='{$name}'>
+<option value=''>请选择档位</option>
+<option value='0'>0档</option>
+<option value='-200'>负1档</option>
+<option value='-500'>负2档</option>
+<option value='-700'>负3档</option>
+<option value='-900'>负4档</option>
+<option value='-1000'>负5档</option>
 </select>";
-	} else {
+        } else {
+            return "<select name='{$name}'>
+<option value=''>请选择档位</option>
+<option value='0'>0档</option>
+	<option value='200'>正1档</option>
+	<option value='500'>正2档</option>
+	<option value='700'>正3档</option>
+	<option value='900'>正4档</option>
+	<option value='1000'>正5档</option>
+</select>";
+        }
+	}else {
         return "<select name='{$name}'>
-<option value='-1000'>请选择档位</option>
-<option value='0'>0档(0)</option>
-<option value='200'>正5档(200)</option>
-<option value='500'>正4档(500)</option>
-<option value='700'>正3档(700)</option>
-<option value='900'>正2档(900)</option>
-<option value='1000'>正1档(1000)</option>
+<option value=''>请选择档位</option>
+<option value='0'>0档</option>
+	<option value='200'>1档</option>
+	<option value='500'>2档</option>
+	<option value='700'>3档</option>
+	<option value='900'>4档</option>
+	<option value='1000'>5档</option>
 </select>";
 	}
+
 
 }
 ?>

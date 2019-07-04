@@ -18,7 +18,7 @@ class RewardsPoolController extends AgentController
     const MODEL = 'Admin/RewardsPool';
     protected $tableName = MysqlConfig::Table_rewardspool;
 
-    const ARR_PAGE = [1 => ['word' => '15条', 'val' => 15, ], 2 => ['word' => '50条', 'val' => 50, ],  3 => ['word' => '150条', 'val' => 150, ], ];
+    const ARR_PAGE = [0 => ['word' => '7条', 'val' => 7, ],1 => ['word' => '15条', 'val' => 15, ], 2 => ['word' => '50条', 'val' => 50, ],  3 => ['word' => '150条', 'val' => 150, ], ];
 
     public function index() {
         echo 'hello';
@@ -238,7 +238,7 @@ GROUP BY
     //奖池控制
     public function prizePoolControl() {
         $page = I('p', 1);
-        $limit = I("limit", self::ARR_PAGE[1]['val']);
+        $limit = I("limit", self::ARR_PAGE[0]['val']);
         $searchType = I("searchType");
         $searchUserType = I("searchUserType");
         $search = trim(I("search"));
@@ -461,22 +461,22 @@ GROUP BY
                     return get_select_str6('platformctrlpercent', 2);
                     break;
                 case 200:
-                    return get_select_str7('platformctrlpercent');
+                    return get_select_str7('platformctrlpercent', 2);
                     break;
                 case 500:
-                    return get_select_str8('platformctrlpercent');
+                    return get_select_str8('platformctrlpercent', 2);
                     break;
                 case 700:
-                    return get_select_str9('platformctrlpercent');
+                    return get_select_str9('platformctrlpercent', 2);
                     break;
                 case 900:
-                    return get_select_str10('platformctrlpercent');
+                    return get_select_str10('platformctrlpercent', 2);
                     break;
                 case 1000:
-                    return get_select_str11('platformctrlpercent');
+                    return get_select_str11('platformctrlpercent', 2);
                     break;
                 default:
-                    return get_select_str12('platformctrlpercent', $value);
+                    return get_select_str12('platformctrlpercent', $value, 2);
                     break;
             }
         } elseif ($type == 3) {
@@ -485,22 +485,22 @@ GROUP BY
                     return get_select_str6('realpeoplefailpercent', 3);
                     break;
                 case 200:
-                    return get_select_str7('realpeoplefailpercent');
+                    return get_select_str7('realpeoplefailpercent', 3);
                     break;
                 case 500:
-                    return get_select_str8('realpeoplefailpercent');
+                    return get_select_str8('realpeoplefailpercent', 3);
                     break;
                 case 700:
-                    return get_select_str9('realpeoplefailpercent');
+                    return get_select_str9('realpeoplefailpercent', 3);
                     break;
                 case 900:
-                    return get_select_str10('realpeoplefailpercent');
+                    return get_select_str10('realpeoplefailpercent', 3);
                     break;
                 case 1000:
-                    return get_select_str11('realpeoplefailpercent');
+                    return get_select_str11('realpeoplefailpercent', 3);
                     break;
                 default:
-                    return get_select_str12('realpeoplefailpercent', $value);
+                    return get_select_str12('realpeoplefailpercent', $value, 3);
                     break;
             }
         } else {
@@ -509,22 +509,22 @@ GROUP BY
                     return get_select_str6('realpeoplewinpercent', 4);
                     break;
                 case 200:
-                    return get_select_str7('realpeoplewinpercent');
+                    return get_select_str7('realpeoplewinpercent', 4);
                     break;
                 case 500:
-                    return get_select_str8('realpeoplewinpercent');
+                    return get_select_str8('realpeoplewinpercent', 4);
                     break;
                 case 700:
-                    return get_select_str9('realpeoplewinpercent');
+                    return get_select_str9('realpeoplewinpercent', 4);
                     break;
                 case 900:
-                    return get_select_str10('realpeoplewinpercent');
+                    return get_select_str10('realpeoplewinpercent', 4);
                     break;
                 case 1000:
-                    return get_select_str11('realpeoplewinpercent');
+                    return get_select_str11('realpeoplewinpercent', 4);
                     break;
                 default:
-                    return get_select_str12('realpeoplewinpercent', $value);
+                    return get_select_str12('realpeoplewinpercent', $value, 4);
                     break;
             }
         }
