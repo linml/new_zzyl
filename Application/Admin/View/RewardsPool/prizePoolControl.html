@@ -125,43 +125,68 @@
                                                        style="text-decoration:none"><font color="#1AB394"><?php echo $v[$vv['key']];?></font></a>
                                                 </td>
                                                 <?php } else { ?>
-                                                <td>
-                                                    <?php
-                                                $type = isset($vv['type']['type']) ? $vv['type']['type'] : '';
-                                                switch($type) {
-                                                    case 'input':
-                                                ?>
+                                                    <td>
+                                                        <?php
+                                                        $type = isset($vv['type']['type']) ? $vv['type']['type'] : '';
+                                                        switch($type) {
+                                                            case 'input':
+                                                        ?>
 
-                                                    <if condition="(($v['gameid'] eq 30000200) OR ($v['gameid'] eq 11100200) OR ($v['gameid'] eq 40000100) OR ($v['gameid'] eq 10000900) OR ($v['gameid'] eq 10001000) OR ($v['gameid'] eq 11000100) OR ($v['gameid'] eq 20170405) OR ($v['gameid'] eq 36610103)) AND (($vv['key'] eq 'realpeoplefailpercent') OR ($vv['key'] eq 'realpeoplewinpercent'))">
-                                                        <input type="text" disabled name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
-                                                    <else />
-                                                        <input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
-                                                    </if>
+                                                        <if condition="(($v['gameid'] eq 30000200) OR ($v['gameid'] eq 11100200) OR ($v['gameid'] eq 40000100) OR ($v['gameid'] eq 10000900) OR ($v['gameid'] eq 10001000) OR ($v['gameid'] eq 11000100) OR ($v['gameid'] eq 20170405) OR ($v['gameid'] eq 36610103)) AND (($vv['key'] eq 'realpeoplefailpercent') OR ($vv['key'] eq 'realpeoplewinpercent'))">
+                                                            <input type="text" disabled name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                        <else />
+                                                            <input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                        </if>
 
-                                                    <!--<in name='$roomid' value="30000200,11100200,40000100,10000900,10001000,11000100,20170405,36610103">
-                                                        <input type="text" disabled name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
-                                                        <else/>
-                                                        <input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
-                                                    </in>-->
-                                                    <!--<input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">-->
+                                                        <!--<in name='$roomid' value="30000200,11100200,40000100,10000900,10001000,11000100,20170405,36610103">
+                                                            <input type="text" disabled name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                            <else/>
+                                                            <input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                        </in>-->
+                                                        <!--<input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">-->
 
-                                                    <?php break;
-                                                    case 'option':
-                                                ?>
-                                                    <select onchange="room_pool('<?php echo $v['roomid']; ?>',this.options[this.options.selectedIndex].value)" name="<?php echo $vv['type']['name'];?>" class="form-control m-b">
-                                                        <!--<option value="">请选择</option>-->
-                                                        <volist name="v.roominfo" id="ov">
-                                                            <option value="{$ov.roomid}" <?php if ($v['roomid'] == $ov['roomid']) {?>selected="selected"<?php }?>>{$ov.name}</option>
-                                                        </volist>
-                                                    </select>
-                                                    <?php
-                                                    break;
-                                                    default :
-                                                ?>
-                                                    <?php echo $v[$vv['key']];?>
-                                                    <?php }?>
+                                                        <?php break;
+                                                            case 'option1':
+                                                        ?>
+                                                            <select onchange="room_pool('<?php echo $v['roomid']; ?>',this.options[this.options.selectedIndex].value)" name="<?php echo $vv['type']['name'];?>" class="form-control m-b">
+                                                                <!--<option value="">请选择</option>-->
+                                                                <volist name="v.roominfo" id="ov">
+                                                                    <option value="{$ov.roomid}" <?php if ($v['roomid'] == $ov['roomid']) {?>selected="selected"<?php }?>>{$ov.name}</option>
+                                                                </volist>
+                                                            </select>
+                                                        <?php
+                                                            break;
+                                                            case 'option2':
+                                                        ?>
+                                                             {$v.platformctrlpercent_option2}
+                                                        <?php
+                                                             break;
+                                                             case 'option3':
+                                                        ?>
+                                                        <if condition="(($v['gameid'] eq 30000200) OR ($v['gameid'] eq 11100200) OR ($v['gameid'] eq 40000100) OR ($v['gameid'] eq 10000900) OR ($v['gameid'] eq 10001000) OR ($v['gameid'] eq 11000100) OR ($v['gameid'] eq 20170405) OR ($v['gameid'] eq 36610103))">
+                                                            <input type="text" disabled name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                        <else />
+                                                            {$v.realpeoplefailpercent_option3}
+                                                        </if>
+                                                             <!--{$v.realpeoplefailpercent_option3}-->
+                                                        <?php
+                                                            break;
+                                                            case 'option4':
+                                                        ?>
+                                                        <if condition="(($v['gameid'] eq 30000200) OR ($v['gameid'] eq 11100200) OR ($v['gameid'] eq 40000100) OR ($v['gameid'] eq 10000900) OR ($v['gameid'] eq 10001000) OR ($v['gameid'] eq 11000100) OR ($v['gameid'] eq 20170405) OR ($v['gameid'] eq 36610103))">
+                                                            <input type="text" disabled name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                        <else />
+                                                            {$v.realpeoplewinpercent_option4}
+                                                        </if>
+                                                            <!--{$v.realpeoplewinpercent_option4}-->
+                                                        <?php
+                                                            break;
+                                                            default :
+                                                        ?>
+                                                        <?php echo $v[$vv['key']];?>
+                                                        <?php }?>
 
-                                                </td>
+                                                    </td>
                                                 <?php } ?>
                                             </volist>
                                             <?php if (!empty($formRequest)) { ?>
@@ -192,9 +217,15 @@
                         $('.current'+$currentroomid).children().eq(3).text(data.sumgamewinmoney);
                         $('.current'+$currentroomid).children().eq(4).text(data.platformcompensate);
                         $('.current'+$currentroomid).find("input[name='incrementofgoldcoin']").val(data.incrementofgoldcoin);
-                        $('.current'+$currentroomid).find("input[name='platformctrlpercent']").val(data.platformctrlpercent);
-                        $('.current'+$currentroomid).find("input[name='realpeoplefailpercent']").val(data.realpeoplefailpercent);
-                        $('.current'+$currentroomid).find("input[name='realpeoplewinpercent']").val(data.realpeoplewinpercent);
+                        $('.current'+$currentroomid).find("select[name='platformctrlpercent']").empty();
+                        $('.current'+$currentroomid).find("select[name='platformctrlpercent']").append(data.platformctrlpercent);
+
+                        $('.current'+$currentroomid).find("select[name='realpeoplefailpercent']").empty();
+                        $('.current'+$currentroomid).find("select[name='realpeoplefailpercent']").append(data.realpeoplefailpercent);
+
+                        $('.current'+$currentroomid).find("select[name='realpeoplewinpercent']").empty();
+                        $('.current'+$currentroomid).find("select[name='realpeoplewinpercent']").append(data.realpeoplewinpercent);
+
                         $('.current'+$currentroomid).find("input[name='minPondMoney']").val(data.minpondmoney);
                         $('.current'+$currentroomid).find("input[name='maxPondMoney']").val(data.maxpondmoney);
 

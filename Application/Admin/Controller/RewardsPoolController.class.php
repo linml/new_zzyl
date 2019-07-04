@@ -335,6 +335,16 @@ GROUP BY
                 ->where(['gameID' => $v['gameid'], 'is_hide' => 0, 'type' => 0, 'roomSign' => 0])
                 ->field('b.name,b.gameID,b.roomID')
                 ->select();
+            //获取输赢胜率千分比的下拉列表
+            $v['platformctrlpercent_option2'] = $this->getSelect(2, $v['platformctrlpercent']);
+            //var_dump($v['platformctrlpercent_option2']);
+            //var_dump(preg_replace("/<(\/?select.*?)>/si","",$v['platformctrlpercent_option2'])); //过滤select标签)
+            //exit;
+            //获取真人玩家输概率的下拉列表
+            $v['realpeoplefailpercent_option3'] = $this->getSelect(3, $v['realpeoplefailpercent']);
+            //获取真人玩家赢概率的下拉列表
+            $v['realpeoplewinpercent_option4'] = $this->getSelect(4, $v['realpeoplewinpercent']);
+
         }
 
         $count = $res['_count'];
@@ -349,7 +359,7 @@ GROUP BY
             'name' => [
                 'key' => 'name',
                 'title' => '游戏名称',
-                'type' => ['type' => 'option', 'name' => 'roomID', 'attribution' => 'style="width:80px;"']
+                'type' => ['type' => 'option1', 'name' => 'roomID', 'attribution' => 'style="width:80px;"']
             ],
             /*'platformprofitability' => [
                 'key' => 'platformprofitability',
@@ -380,17 +390,17 @@ GROUP BY
             'platformctrlpercent' => [
                 'key' => 'platformctrlpercent',
                 'title' => '输赢胜率千分比<br/>(输入范围-1000 到 1000)',
-                'type' => ['type' => 'input', 'name' => 'platformctrlpercent', 'attribution' => 'style="width:80px;"']
+                'type' => ['type' => 'option2', 'name' => 'platformctrlpercent', 'attribution' => 'style="width:80px;"']
             ],
             'realPeopleFailPercent' => [
                 'key' => 'realpeoplefailpercent',
                 'title' => '真人玩家输概率<br/>(输入范围0 到 1000)',
-                'type' => ['type' => 'input', 'name' => 'realpeoplefailpercent', 'attribution' => 'style="width:80px;"']
+                'type' => ['type' => 'option3', 'name' => 'realpeoplefailpercent', 'attribution' => 'style="width:80px;"']
             ],
             'realPeopleWinPercent' => [
                 'key' => 'realpeoplewinpercent',
                 'title' => '真人玩家赢概率<br/>(输入范围0 到 1000)',
-                'type' => ['type' => 'input', 'name' => 'realpeoplewinpercent', 'attribution' => 'style="width:80px;"']
+                'type' => ['type' => 'option4', 'name' => 'realpeoplewinpercent', 'attribution' => 'style="width:80px;"']
             ],
             'minPondMoney' => [
                 'key' => 'minpondmoney',
@@ -422,6 +432,104 @@ GROUP BY
         $this->display();
     }
 
+    /*
+     * //获取奖池控制下拉列表前端代码
+     * @param int $type  下拉列表类型
+     * @param float $value  输赢胜率值
+     * reture string
+     * */
+    public function getSelect($type, $value)
+    {
+        if ($type == 2) {
+            switch ($value) {
+                case -1000:
+                    return get_select_str1('platformctrlpercent');
+                    break;
+                case -900:
+                    return get_select_str2('platformctrlpercent');
+                    break;
+                case -700:
+                    return get_select_str3('platformctrlpercent');
+                    break;
+                case -500:
+                    return get_select_str4('platformctrlpercent');
+                    break;
+                case -200:
+                    return get_select_str5('platformctrlpercent');
+                    break;
+                case 0:
+                    return get_select_str6('platformctrlpercent', 2);
+                    break;
+                case 200:
+                    return get_select_str7('platformctrlpercent');
+                    break;
+                case 500:
+                    return get_select_str8('platformctrlpercent');
+                    break;
+                case 700:
+                    return get_select_str9('platformctrlpercent');
+                    break;
+                case 900:
+                    return get_select_str10('platformctrlpercent');
+                    break;
+                case 1000:
+                    return get_select_str11('platformctrlpercent');
+                    break;
+                default:
+                    return get_select_str12('platformctrlpercent', $value);
+                    break;
+            }
+        } elseif ($type == 3) {
+            switch ($value) {
+                case 0:
+                    return get_select_str6('realpeoplefailpercent', 3);
+                    break;
+                case 200:
+                    return get_select_str7('realpeoplefailpercent');
+                    break;
+                case 500:
+                    return get_select_str8('realpeoplefailpercent');
+                    break;
+                case 700:
+                    return get_select_str9('realpeoplefailpercent');
+                    break;
+                case 900:
+                    return get_select_str10('realpeoplefailpercent');
+                    break;
+                case 1000:
+                    return get_select_str11('realpeoplefailpercent');
+                    break;
+                default:
+                    return get_select_str12('realpeoplefailpercent', $value);
+                    break;
+            }
+        } else {
+            switch ($value) {
+                case 0:
+                    return get_select_str6('realpeoplewinpercent', 4);
+                    break;
+                case 200:
+                    return get_select_str7('realpeoplewinpercent');
+                    break;
+                case 500:
+                    return get_select_str8('realpeoplewinpercent');
+                    break;
+                case 700:
+                    return get_select_str9('realpeoplewinpercent');
+                    break;
+                case 900:
+                    return get_select_str10('realpeoplewinpercent');
+                    break;
+                case 1000:
+                    return get_select_str11('realpeoplewinpercent');
+                    break;
+                default:
+                    return get_select_str12('realpeoplewinpercent', $value);
+                    break;
+            }
+        }
+    }
+
     //获取每一个子游戏的奖池控制信息
     public function getRoomBaseInfo(){
         $v = M()
@@ -443,9 +551,16 @@ GROUP BY
         $v['allpercentagewinmoney'] = FunctionHelper::MoneyOutput((int)$v['allpercentagewinmoney']);
         $v['otherwinmoney'] = FunctionHelper::MoneyOutput((int)$v['otherwinmoney']);
         $v['allotherwinmoney'] = FunctionHelper::MoneyOutput((int)$v['allotherwinmoney']);
-        $v['platformctrlpercent'] = (int)$rewsinfo['platformCtrlPercent']; //单点控制千分比	redis获取
-        $v['realpeoplefailpercent'] = (int)$v['realpeoplefailpercent'];
-        $v['realpeoplewinpercent'] = (int)$v['realpeoplewinpercent'];
+        //preg_replace("/<(\/?select.*?)>/si","",$v['platformctrlpercent_option2'])
+        //$v['platformctrlpercent'] = (int)$rewsinfo['platformCtrlPercent']; //单点控制千分比	redis获取
+        $platformctrlpercent = $this->getSelect(2, $rewsinfo['platformCtrlPercent']);
+        $v['platformctrlpercent'] = preg_replace("/<(\/?select.*?)>/si","",$platformctrlpercent);
+        //$v['realpeoplefailpercent'] = (int)$v['realpeoplefailpercent'];
+        $realpeoplefailpercent = $this->getSelect(3, $v['realpeoplefailpercent']);
+        $v['realpeoplefailpercent'] = preg_replace("/<(\/?select.*?)>/si","",$realpeoplefailpercent);
+        //$v['realpeoplewinpercent'] = (int)$v['realpeoplewinpercent'];
+        $realpeoplewinpercent = $this->getSelect(4, $v['realpeoplewinpercent']);
+        $v['realpeoplewinpercent'] = preg_replace("/<(\/?select.*?)>/si","",$realpeoplewinpercent);
         $v['minpondmoney'] = (int)$v['minpondmoney'] /100;
         $v['maxpondmoney'] = (int)$v['maxpondmoney'] /100;
         $v['recoverypoint'] = FunctionHelper::MoneyOutput((int)$v['recoverypoint']);
