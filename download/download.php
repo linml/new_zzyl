@@ -197,7 +197,12 @@ if (!defined('zzyl')) {
 
             /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
             button.onclick = function() {
-                m.wakeupOrInstall();
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                if (isiOS) {
+
+                } else {
+                    m.wakeupOrInstall();
+                }
             }
 
             newbutton = document.getElementById("newdownloadButton");
@@ -205,7 +210,12 @@ if (!defined('zzyl')) {
 
             /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
             newbutton.onclick = function() {
-                m.wakeupOrInstall();
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                if (isiOS) {
+
+                } else {
+                    m.wakeupOrInstall();
+                }
             }
         }
     }, data);
