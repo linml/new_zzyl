@@ -196,6 +196,7 @@ if (!defined('zzyl')) {
             button.style.visibility = "visible";
 
             /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
+            var u = navigator.userAgent;
             button.onclick = function() {
                 var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
                 if (isiOS) {
