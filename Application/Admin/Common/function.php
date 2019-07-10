@@ -126,7 +126,7 @@ function get_select_str6($name, $type){
 <option value='-1000'>负5档</option>
 <option value='-900'>负4档</option>
 <option value='-700'>负3档</option>
-<option value='-500'>负4档</option>
+<option value='-500'>负2档</option>
 <option value='-200'>负1档</option>
 <option value='0'  selected='selected'>0档</option>
 <option value='200'>正1档</option>
