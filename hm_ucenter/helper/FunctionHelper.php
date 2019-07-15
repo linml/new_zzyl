@@ -481,4 +481,24 @@ final class FunctionHelper
             return floor($time/(60*60*24)) . '天' . floor($time%(60*60*24)/(60*60)) .'小时' . floor($time%(60*60)/60) . '分' . ($time%(60)) . '秒';
         }
     }
+
+    /**
+     * 删除数组中指定key 的元素
+     * @param $arr
+     * @param $key
+     * @return mixed
+     *
+     */
+    public  static  function  array_remove($arr,$key)
+    {
+        if (!array_key_exists($key,$arr)) {
+            return $arr;
+        }
+        $keys = array_keys($arr);
+        $index = array_search($key,$keys);
+        if ($index !== false) {
+            array_splice($arr,$index,1);
+        }
+        return $arr;
+    }
 }

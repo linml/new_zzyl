@@ -10,6 +10,7 @@ final class GameRedisConfig
     const String_PrivateDeskIndex = 'privateDeskIndex'; //俱乐部房间（牌桌,弃用）
     const String_FGRoomInfo = 'FGRoomInfo'; //俱乐部房间（牌桌）
     const String_phoneToUserID = 'phoneToUserID'; //手机和用户ID的映射
+    const Hash_userBag = 'userBag';
 
     /*
         TODO  Hash（字典）

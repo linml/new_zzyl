@@ -24,6 +24,8 @@ final class MysqlConfig
     const Table_statistics_day_performance = 'statistics_day_performance'; //奖池记录
     const Table_pumping_ratio = 'pumping_ratio'; //代理奖励规则
     const Table_userinfo = 'userInfo'; //玩家信息
+    const Table_usebag = 'web_userbag';//用户背包
+    const Table_bagattribute = "web_bagattribute";//道具列表
 
     /*
      TODO web Table
