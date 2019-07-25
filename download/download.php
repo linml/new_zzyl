@@ -192,34 +192,34 @@ if (!defined('zzyl')) {
         //weChatdownload:true,
         onready : function() {
             //shareinstall已成功回调
-            var m = this, button = document.getElementById("downloadButton");
-            button.style.visibility = "visible";
+            // var m = this, button = document.getElementById("downloadButton");
+            // button.style.visibility = "visible";
 
-            /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
-            var u = navigator.userAgent;
-            button.onclick = function() {
-                /*var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-                if (isiOS) {
+            // /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
+            // var u = navigator.userAgent;
+            // button.onclick = function() {
+            //     /*var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            //     if (isiOS) {
 
-                } else {
-                    m.wakeupOrInstall();
-                }*/
-                m.wakeupOrInstall();
-            }
+            //     } else {
+            //         m.wakeupOrInstall();
+            //     }*/
+            //     m.wakeupOrInstall();
+            // }
 
-            newbutton = document.getElementById("newdownloadButton");
-            newbutton.style.visibility = "visible";
+            // newbutton = document.getElementById("newdownloadButton");
+            // newbutton.style.visibility = "visible";
 
-            /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
-            newbutton.onclick = function() {
-                /*var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-                if (isiOS) {
+            // /*用户点击某个按钮时(假定按钮id为downloadButton)，安装app*/
+            // newbutton.onclick = function() {
+            //     /*var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            //     if (isiOS) {
 
-                } else {
-                    m.wakeupOrInstall();
-                }*/
-                m.wakeupOrInstall();
-            }
+            //     } else {
+            //         m.wakeupOrInstall();
+            //     }*/
+            //     m.wakeupOrInstall();
+            // }
         }
     }, data);
 </script>
