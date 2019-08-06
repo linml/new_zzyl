@@ -17,13 +17,14 @@ final class StructConfig
      * @param $otherValue
      * @return string
      */
-    public static function userStatus($type, $statusValue, $otherValue, $moneyLimit)
+    public static function userStatus($type, $statusValue, $otherValue, $moneyLimit,$ctrlPercent)
     {
         $pack = '';
         $pack .= pack('C', $type);//0 取消 1设置
         $pack .= pack('C', $statusValue);//1超端 2赢玩家 4 输玩家 8 封号
         $pack .= pack('l', $otherValue);//封号在此填写时间 -1 永久
         $pack .= pack('q', $moneyLimit);//赢玩家赢钱上限
+        $pack .= pack('l', $ctrlPercent);//玩家赢输概率
         return $pack;
     }
 

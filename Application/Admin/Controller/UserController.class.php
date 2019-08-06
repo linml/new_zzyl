@@ -1667,7 +1667,7 @@ class UserController extends AdminController
             $type = I('type');
             $statusValue = I('statusValue');
             $moneyLimit  = I('moneyLimit');
-            $ctrlPercent  = (int)I('ctrlPercent');
+            $ctrlPercent  = I('ctrlPercent');
             if ($statusValue == 0) {
                 $this->error('请选择需要设置的身份');
             }
