@@ -1667,6 +1667,7 @@ class UserController extends AdminController
             $type = I('type');
             $statusValue = I('statusValue');
             $moneyLimit  = I('moneyLimit');
+            $ctrlPercent  = (int)I('ctrlPercent');
             if ($statusValue == 0) {
                 $this->error('请选择需要设置的身份');
             }
@@ -1674,7 +1675,7 @@ class UserController extends AdminController
             if ($otherValue > 0) {
                 $otherValue = $otherValue * 24 * 3600;
             }
-            CenterNotify::userStatus($userID, $type, $statusValue, $otherValue, $moneyLimit*100);
+            CenterNotify::userStatus($userID, $type, $statusValue, $otherValue, $moneyLimit*100,$ctrlPercent);
             $this->success('设置成功');
         } else {
             //获取我的身份
