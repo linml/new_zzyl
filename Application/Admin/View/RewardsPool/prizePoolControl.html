@@ -321,7 +321,8 @@
                             //设置负档
                             $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").text("负"+num+"档");
                             $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").val(-platformctrlpercent_now);
-                            console.log(num,platformctrlpercent_name);
+                            var platformbankmoney2 = parseFloat($('.current'+roomid).find("input[name='platformbankmoney']").val());
+                            console.log(platformbankmoney2,num,platformctrlpercent_name);
                         }
                     //当前平台输赢胜率为负档，如果减少平台补偿金额后，实时奖池金额低于奖池金额下限了，则表rewardsPool中的platformBankMoney的数值累加，累加的金额为gameWinMoney和allGameWinMoney之和减去platformBankMoney而platformCompensate金额清零平台输赢胜率要自动转成对应的正档，这个时候实时奖池自动会转成0;
                     }else if(platformctrlpercent_now < 0){
