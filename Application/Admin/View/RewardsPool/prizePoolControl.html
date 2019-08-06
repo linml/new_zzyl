@@ -106,7 +106,9 @@
                                 <thead>
                                 <tr>
                                     <volist name="show_list" id="v">
+                                        <?php if ($v['type']['type'] != "hidden") { ?>
                                         <th>{$v.title}</th>
+                                        <?php }?>
                                     </volist>
                                     <?php if (!empty($formRequest)) { ?>
                                     <th>修改</th>
@@ -118,6 +120,19 @@
                                     <tr class = "<?php echo 'current'.$v['roomid']; ?>">
                                         <form action="{$formRequest}" method="post" onsubmit="return form_ajax_post(this,{$v['roomid']});">
                                             <volist name="show_list" key="k" id="vv">
+                                               <!--  <?php
+                                                        $type = isset($vv['type']['type']) ? $vv['type']['type'] : '';
+                                                        switch($type) {
+                                                            case 'hidden':
+                                                        ?>
+                                                        <input type="hidden" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
+                                                <?php
+                                                            break;
+                                                            default :
+                                                        ?>
+                                                        <?php }?> -->
+                                                        
+
                                                 <?php if (!empty($vv['href'])){ ?>
                                                 <td>
                                                     <input type="hidden" name="<?php echo $vv['type']['name'];?>" value="<?php echo $v[$vv['key']];?>">
@@ -144,6 +159,11 @@
                                                             <input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
                                                         </in>-->
                                                         <!--<input type="text" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">-->
+
+                                                        <?php break;
+                                                            case 'hidden':
+                                                        ?>
+                                                         <input type="hidden" name="<?php echo $vv['type']['name'];?>" class="form-control" <?php echo $vv['type']['attribution'];?> value="<?php echo $v[$vv['key']];?>">
 
                                                         <?php break;
                                                             case 'option1':
@@ -236,6 +256,13 @@
 
         </script>
         <script type="text/javascript">
+            //附档则表rewardsPool中的platformBankMoney的数值累加，累加的金额为gameWinMoney和allGameWinMoney之和减去platformBankMoney，所以这需要影藏2019.8.5
+            $(function(){
+               $("input[name='platformbankmoney']").parent().hide();
+               $("input[name='gamewinmoney']").parent().hide();
+               $("input[name='allgamewinmoney']").parent().hide();
+            });
+
             //ajax post
             function form_ajax_post(e,roomid){
                 var option = $('.current'+roomid).find("select option:selected").text();
@@ -269,9 +296,69 @@
                 layer.confirm('您确定要做此操作吗？', {
                     btn: ['确定','取消'] //按钮
                 }, function(){
+                    //平台补偿金币操作之后，平台输赢胜率要自动往相应的变化2019.8.5
+                    //平台输赢胜率内容(正一档)
+                    var platformctrlpercent_name = $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").text();
+                    //平台输赢胜率val值(正一档的值是200)
+                    var platformctrlpercent_old = $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").val();
+                    // var platformctrlpercent_now = Math.abs(platformctrlpercent_old);
+                    var platformctrlpercent_now = parseInt(platformctrlpercent_old);
+                    //实时奖池手动增减量
+                    var incrementofgoldcoin = parseFloat($('.current'+roomid).find("input[name='incrementofgoldcoin']").val());
+                    //实时奖池
+                    var sumgamewinmoney = parseFloat($('.current'+roomid).find("input[name='sumgamewinmoney']").val());
+                    //奖池金额下限(0表示默认的800)
+                    var minPondMoney = ($('.current'+roomid).find("input[name='minPondMoney']").val() == 0) ? 800 : $('.current'+roomid).find("input[name='minPondMoney']").val();
+                    //奖池金额上限(0表示默认的1000)
+                    var maxPondMoney = ($('.current'+roomid).find("input[name='maxPondMoney']").val() == 0)? 1000 : $('.current'+roomid).find("input[name='maxPondMoney']").val();
+                    //负档转正档的标识(默认0)
+                    platformctrlpercent_nowlt0 = 0;
+                    //当前平台输赢胜率为正档，如果增加平台补偿金币后，实时奖池金额超出奖池金额上限了，平台输赢胜率要自动转成对应的负档
+                    if(platformctrlpercent_now > 0){
+                        if(incrementofgoldcoin+sumgamewinmoney > maxPondMoney){
+                            var platformctrlpercent_name = $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").text();
+                            var num = platformctrlpercent_name.replace(/[^0-9]/ig,"");
+                            //设置负档
+                            $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").text("负"+num+"档");
+                            $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").val(-platformctrlpercent_now);
+                            console.log(num,platformctrlpercent_name);
+                        }
+                    //当前平台输赢胜率为负档，如果减少平台补偿金额后，实时奖池金额低于奖池金额下限了，则表rewardsPool中的platformBankMoney的数值累加，累加的金额为gameWinMoney和allGameWinMoney之和减去platformBankMoney而platformCompensate金额清零平台输赢胜率要自动转成对应的正档，这个时候实时奖池自动会转成0;
+                    }else if(platformctrlpercent_now < 0){
+                        if(incrementofgoldcoin+sumgamewinmoney < minPondMoney){
+                            var platformctrlpercent_name = $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").text();
+                            var num = platformctrlpercent_name.replace(/[^0-9]/ig,"");
+                            //设置负档
+                            $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").text("正"+num+"档");
+                            var platformctrlpercent_now = Math.abs(platformctrlpercent_old);//设为正档
+                            $('.current'+roomid).find("select[name='platformctrlpercent']>option:selected").val(platformctrlpercent_now);
+                            $('.current'+roomid).find("input[name='sumgamewinmoney']").val(0);
+                            $('.current'+roomid).find("input[name='platformcompensate']").val(0.00);
+                            var platformbankmoney = parseFloat($('.current'+roomid).find("input[name='platformbankmoney']").val());
+                            var gamewinmoney = parseFloat($('.current'+roomid).find("input[name='gamewinmoney']").val());
+                            var allgamewinmoney = parseFloat($('.current'+roomid).find("input[name='allgamewinmoney']").val());
+                            var platformBankMoney_now = (gamewinmoney + allgamewinmoney - platformbankmoney);
+                            $('.current'+roomid).find("input[name='platformbankmoney']").val(platformBankMoney_now);
+                            console.log(platformctrlpercent_now);
+                            //负档转正档的标识(设置成1)
+                            var platformctrlpercent_nowlt0 = 1;
+                        }
+                    }
+
+                    console.log(platformctrlpercent_nowlt0,platformBankMoney_now,platformbankmoney,gamewinmoney,allgamewinmoney,maxPondMoney,minPondMoney,sumgamewinmoney,incrementofgoldcoin,platformctrlpercent_name,platformctrlpercent_now);
+
+                    
+                    // return false;
+
+
                     var form = $form;
                     var url= $form.attr('action');
-                    var cs = $form.serialize();
+                    if(platformctrlpercent_nowlt0 == 1){
+                       var cs = $.param({'platformctrlpercent_nowlt0':platformctrlpercent_nowlt0})+'&'+$form.serialize();
+                    }else{
+                       var cs = $form.serialize();  
+                    }
+                    // console.log(cs);return false;
                     $.ajax({
                         url:url,
                         data:cs,

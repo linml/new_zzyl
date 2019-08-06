@@ -246,6 +246,7 @@ class LobbyModel extends AppModel
         if ($roomID == 0 || empty($rewardsPool)) {
             return false;
         }
+        // var_dump($rewardsPool);die;
         if ($this->updateRewardsPoolToRedis($roomID, $rewardsPool)) {
             return $this->updateRewardsPoolToDB($roomID, $rewardsPool);
         }

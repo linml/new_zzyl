@@ -369,10 +369,12 @@ GROUP BY
             'sumgamewinmoney' => [
                 'key' => 'sumgamewinmoney',
                 'title' => '实时奖池',
+                'type' => ['type' => 'input', 'name' => 'sumgamewinmoney', 'attribution' => 'style="width:80px;"']
             ],
             'platformcompensate' => [
                 'key' => 'platformcompensate',
                 'title' => '平台补偿金币',
+                'type' => ['type' => 'input', 'name' => 'platformcompensate', 'attribution' => 'style="width:80px;"']
             ],
             /*'platformbankmoney' => [
                 'key' => 'platformbankmoney',
@@ -390,17 +392,17 @@ GROUP BY
             ],
             'platformctrlpercent' => [
                 'key' => 'platformctrlpercent',
-                'title' => '输赢胜率千分比<br/>(输入范围-1000 到 1000)',
+                'title' => '平台输赢胜率',
                 'type' => ['type' => 'option2', 'name' => 'platformctrlpercent', 'attribution' => 'style="width:80px;"']
             ],
             'realPeopleFailPercent' => [
                 'key' => 'realpeoplefailpercent',
-                'title' => '真人玩家输概率<br/>(输入范围0 到 1000)',
+                'title' => '真人玩家输概率',
                 'type' => ['type' => 'option3', 'name' => 'realpeoplefailpercent', 'attribution' => 'style="width:80px;"']
             ],
             'realPeopleWinPercent' => [
                 'key' => 'realpeoplewinpercent',
-                'title' => '真人玩家赢概率<br/>(输入范围0 到 1000)',
+                'title' => '真人玩家赢概率',
                 'type' => ['type' => 'option4', 'name' => 'realpeoplewinpercent', 'attribution' => 'style="width:80px;"']
             ],
             'minPondMoney' => [
@@ -412,6 +414,23 @@ GROUP BY
                 'key' => 'maxpondmoney',
                 'title'=> '奖池金额上限<br/>(0表示默认的1000)',
                 'type' => ['type' => 'input', 'name' => 'maxPondMoney', 'attribution' => 'style="width:80px;"'],
+            ],
+
+            //平台补偿金币操作之后，平台输赢胜率要自动往相应的变化 2019.8.5
+            'platformbankmoney' => [
+                'key' => 'platformbankmoney',
+                'title' => "平台银行储蓄",
+                'type' => ['type' => 'hidden', 'name' => 'platformbankmoney', 'attribution' => 'style="width:80px;"']
+            ],
+            'gamewinmoney' => [
+                'key' => 'gamewinmoney',
+                'title' => "游戏输赢钱",
+                'type' => ['type' => 'hidden', 'name' => 'gamewinmoney', 'attribution' => 'style="width:80px;"']
+            ],
+            'allgamewinmoney' => [
+                'key' => 'allgamewinmoney',
+                'title' => "累计输赢金币数量",
+                'type' => ['type' => 'hidden', 'name' => 'allgamewinmoney', 'attribution' => 'style="width:80px;"']
             ],
         ];
         $this->assign([
@@ -446,13 +465,13 @@ GROUP BY
                 case -1000:
                     return get_select_str1('platformctrlpercent');
                     break;
-                case -900:
+                case -800:
                     return get_select_str2('platformctrlpercent');
                     break;
-                case -700:
+                case -600:
                     return get_select_str3('platformctrlpercent');
                     break;
-                case -500:
+                case -400:
                     return get_select_str4('platformctrlpercent');
                     break;
                 case -200:
@@ -464,13 +483,13 @@ GROUP BY
                 case 200:
                     return get_select_str7('platformctrlpercent', 2);
                     break;
-                case 500:
+                case 400:
                     return get_select_str8('platformctrlpercent', 2);
                     break;
-                case 700:
+                case 600:
                     return get_select_str9('platformctrlpercent', 2);
                     break;
-                case 900:
+                case 800:
                     return get_select_str10('platformctrlpercent', 2);
                     break;
                 case 1000:
@@ -488,13 +507,13 @@ GROUP BY
                 case 200:
                     return get_select_str7('realpeoplefailpercent', 3);
                     break;
-                case 500:
+                case 400:
                     return get_select_str8('realpeoplefailpercent', 3);
                     break;
-                case 700:
+                case 600:
                     return get_select_str9('realpeoplefailpercent', 3);
                     break;
-                case 900:
+                case 800:
                     return get_select_str10('realpeoplefailpercent', 3);
                     break;
                 case 1000:
@@ -512,13 +531,13 @@ GROUP BY
                 case 200:
                     return get_select_str7('realpeoplewinpercent', 4);
                     break;
-                case 500:
+                case 400:
                     return get_select_str8('realpeoplewinpercent', 4);
                     break;
-                case 700:
+                case 600:
                     return get_select_str9('realpeoplewinpercent', 4);
                     break;
-                case 900:
+                case 800:
                     return get_select_str10('realpeoplewinpercent', 4);
                     break;
                 case 1000:
@@ -573,9 +592,14 @@ GROUP BY
     public function rewardsPoolEdit() {
         if ($_POST) {
             M()->startTrans();
+            // var_dump(I('post.'));die;
             //根据roomid查询出当前房间的平台补偿金币
-            $platformCompensate = M()->table(MysqlConfig::Table_rewardspool)->where(['roomID' => I('roomID')])->field('platformCompensate')->find();
-            $pmoney = (int)I('incrementofgoldcoin') * 100 + $platformCompensate['platformcompensate'];
+            if((int)I('platformctrlpercent_nowlt0') == 1){
+                $pmoney = 0;
+            }else{
+                $platformCompensate = M()->table(MysqlConfig::Table_rewardspool)->where(['roomID' => I('roomID')])->field('platformCompensate')->find();
+                $pmoney = (int)I('incrementofgoldcoin') * 100 + $platformCompensate['platformcompensate'];
+            }
             $result = LobbyModel::getInstance()->updateRewardsPool((int)I('roomID'), [
                 'poolMoney' => FunctionHelper::MoneyInput((int)I('poolmoney')),//奖池
                 'platformCtrlPercent' => (int)I('platformctrlpercent'),//单点控制千分比(输赢胜率千分比)
