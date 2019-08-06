@@ -337,7 +337,8 @@
                             var platformbankmoney = parseFloat($('.current'+roomid).find("input[name='platformbankmoney']").val());
                             var gamewinmoney = parseFloat($('.current'+roomid).find("input[name='gamewinmoney']").val());
                             var allgamewinmoney = parseFloat($('.current'+roomid).find("input[name='allgamewinmoney']").val());
-                            var platformBankMoney_now = (gamewinmoney + allgamewinmoney - platformbankmoney);
+                            // var platformBankMoney_now = (gamewinmoney + allgamewinmoney - platformbankmoney);
+                            var platformBankMoney_now = (gamewinmoney + allgamewinmoney);
                             $('.current'+roomid).find("input[name='platformbankmoney']").val(platformBankMoney_now);
                             console.log(platformctrlpercent_now);
                             //负档转正档的标识(设置成1)

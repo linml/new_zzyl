@@ -309,6 +309,7 @@ GROUP BY
 
         foreach ($listCommission as $k => &$v) {
             $rewsinfo = RedisManager::getGameRedis()->hGetAll("rewardsPool|".$v['roomid']);
+            // var_dump($rewsinfo);
             $v['gamewinmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['gameWinMoney']); //今日游戏输赢钱   实时获取
             $v['allgamewinmoney'] = FunctionHelper::MoneyOutput((int)$rewsinfo['allGameWinMoney']); //今日前累计游戏输赢钱  实时获取
             $v['platformcompensate'] = FunctionHelper::MoneyOutput((int)$rewsinfo['platformCompensate']); //平台补偿金币   实时获取
@@ -610,6 +611,9 @@ GROUP BY
                 //'recoveryPoint' => (int)I('recoverypoint') * 100,
                 'platformCompensate' => $pmoney,
                 'updateTime' => time(),
+                'platformBankMoney' => (int)I('platformbankmoney'),
+                // 'gameWinMoney' => (int)I('gamewinmoney'),
+                // 'allGameWinMoney' => (int)I('allgamewinmoney'),
             ]);
             if (!$result) {
                 M()->rollback();
